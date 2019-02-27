@@ -22,11 +22,11 @@ end
 exitButton:addEventListener( "tap", exitButton_tap )
 
 local onMouseHoverExit = function(event)
-        if event.phase == "began" then
-                exitButton:scale(1.1,1.1)
-        elseif event.phase == "ended" then
-                exitButton:scale(0.90909,0.90909)
-        end
+    if event.phase == "began" then
+            exitButton:scale(1.1,1.1)
+    elseif event.phase == "ended" then
+            exitButton:scale(0.90909,0.90909)
+    end
 end
 exitButton:addEventListener( "mouseHover", onMouseHoverExit )
 
@@ -41,12 +41,12 @@ local continueButtonLight = display.newImageRect( uiGroup, "continuebuttonlight.
     continueButtonLight.isVisible = false
 
 local onMouseHover = function(event)
-        if event.phase == "began" then
-                event.target.isVisible = true
-                continueButtonLight.isVisible = true
-        elseif event.phase == "ended" then
-                continueButtonLight.isVisible = false
-        end
+    if event.phase == "began" then
+            event.target.isVisible = true
+            continueButtonLight.isVisible = true
+    elseif event.phase == "ended" then
+            continueButtonLight.isVisible = false
+    end
 end
 continueButton:addEventListener( "mouseHover", onMouseHover )
 
@@ -61,12 +61,12 @@ local newButtonLight = display.newImageRect( uiGroup, "newbuttonlight.png", 658,
     newButtonLight.isVisible = false
 
 local onMouseHover2 = function(event)
-        if event.phase == "began" then
-                event.target.isVisible = true
-                newButtonLight.isVisible = true
-        elseif event.phase == "ended" then
-                newButtonLight.isVisible = false
-        end
+    if event.phase == "began" then
+            event.target.isVisible = true
+            newButtonLight.isVisible = true
+    elseif event.phase == "ended" then
+            newButtonLight.isVisible = false
+    end
 end
 newButton:addEventListener( "mouseHover", onMouseHover2 )
 
@@ -81,59 +81,83 @@ local menuButtonLight = display.newImageRect( uiGroup, "menubuttonlight.png", 65
     menuButtonLight.isVisible = false
 
 local onMouseHover3 = function(event)
-        if event.phase == "began" then
-                event.target.isVisible = true
-                menuButtonLight.isVisible = true
-        elseif event.phase == "ended" then
-                menuButtonLight.isVisible = false
-        end
+    if event.phase == "began" then
+            event.target.isVisible = true
+            menuButtonLight.isVisible = true
+    elseif event.phase == "ended" then
+            menuButtonLight.isVisible = false
+    end
 end
 menuButton:addEventListener( "mouseHover", onMouseHover3 )
+
+local backButton = display.newImageRect( uiGroup, "backbutton.png", 71, 101)
+    backButton.x = 71
+    backButton.y = 73
+    local onMouseHoverBack = function(event) ------------------------------bugged when switching menu and new game (wtf?)
+         if event.phase == "began" then
+                 backButton:scale(1.1,1.1)
+         elseif event.phase == "ended" then
+                 backButton:scale(0.90909,0.90909)
+         end
+     end
+     backButton.isVisible = false
 
 local function menuClicked()
     continueButton.isVisible = false
     newButton.isVisible = false
     menuButton.isVisible = false
     menuButtonLight.isVisible = false
+    backButton.isVisible = true
+    exitButton.isVisible = false
 
-    local backButton = display.newImageRect( uiGroup, "backbutton.png", 71, 101)
-        backButton.x = 71
-        backButton.y = 73
-
-   local onMouseHoverBack = function(event)
-        if event.phase == "began" then
-                backButton:scale(1.1,1.1)
-        elseif event.phase == "ended" then
-                backButton:scale(0.90909,0.90909)
-        end
-    end
     backButton:addEventListener( "mouseHover", onMouseHoverBack )
 
     local function backToStart()
-      continueButton.isVisible = true
-      newButton.isVisible = true
-      menuButton.isVisible = true
-      backButton.isVisible = false
+        continueButton.isVisible = true
+        newButton.isVisible = true
+        menuButton.isVisible = true
+        backButton.isVisible = false
+        exitButton.isVisible = true
     end
-backButton:addEventListener("tap", backToStart)
+    backButton:addEventListener("tap", backToStart)
 end
 menuButton:addEventListener("tap", menuClicked)
 
 -- NEW GAME PRESSED --
 local function newButton_tap()
-  continueButton.isVisible = false
-  newButton.isVisible = false
-  newButtonLight.isVisible = false
-  menuButton.isVisible = false
-  exitButton.isVisible = false
-  --menuButton.isVisible = false
-      local chooseClass = display.newText( uiGroup,"Choose Your Class!", display.contentCenterX, display.contentCenterY - 300, native.systemFont, 80  )
-      chooseClass:setFillColor(255, 0, 255) --Lua uses RGB Colours
-      local mageIcon = display.newImageRect(uiGroup, "Badge_mage.png", 500, 500)
-      mageIcon.x = display.contentCenterX
-      mageIcon.y = display.contentCenterY
+    continueButton.isVisible = false
+    newButton.isVisible = false
+    newButtonLight.isVisible = false
+    menuButton.isVisible = false
+    exitButton.isVisible = false
+    backButton.isVisible = true
+    local chooseClass = display.newText( uiGroup,"Choose Your Class!", display.contentCenterX, display.contentCenterY - 300, native.systemFont, 80  )
+        chooseClass:setFillColor(255, 0, 255) --Lua uses RGB Colours
+    local mageIcon = display.newImageRect(uiGroup, "Badge_mage.png", 500, 500)
+        mageIcon.x = display.contentCenterX
+        mageIcon.y = display.contentCenterY
+    local onMouseHoverMage = function(event)
+        if event.phase == "began" then
+                  mageIcon:scale(1.1,1.1)
+        elseif event.phase == "ended" then
+                      mageIcon:scale(0.90909,0.90909)
+        end
+    end
+     mageIcon:addEventListener( "mouseHover", onMouseHoverMage )
+     backButton:addEventListener("mouseHover", onMouseHoverBack)
+    local function backToStart()
+        continueButton.isVisible = true
+        newButton.isVisible = true
+        menuButton.isVisible = true
+        backButton.isVisible = false
+        mageIcon.isVisible = false
+        chooseClass.isVisible = false
+        exitButton.isVisible = true
+    end
+    backButton:addEventListener("tap", backToStart)
 end
 newButton:addEventListener( "tap", newButton_tap )
+
 ----------------------------------------------------------------------------
 --GAME----------------------------------------------------------------------
 ----------------------------------------------------------------------------
@@ -150,9 +174,9 @@ local Player
 
 -- PLAYER PHYSICS --
 local function Player()
-  local Player = display.newImageRect(mainGroup,"Player.png", 100, 100)
-  physics.addBody(Player, {radius=40, isSensor=true})
-  Player.myName = "Player"
+    local Player = display.newImageRect(mainGroup,"Player.png", 100, 100)
+    physics.addBody(Player, {radius=40, isSensor=true})
+    Player.myName = "Player"
 end
 
 -- wall physics --
