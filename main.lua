@@ -5,7 +5,7 @@ local mouseHover = require 'plugin.mouseHover' -- requiring a plugin for mouseov
 local backGroup = display.newGroup()         --Background assets
 local uiGroup = display.newGroup()           --UI assets
 local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
-
+--[[
 -- UI BACKGROUND --
 local background = display.newImageRect( backGroup, "ui_background.png", 1920, 1080 ) --declaring background image
     background.x = display.contentCenterX
@@ -189,7 +189,7 @@ local function mageIconClicked() --when the mage is clicked start new game
     mageIcon.isVisible = false
     chooseClass.isVisible = false
     background.isVisible = false
-    backButtonNew.isVisible = false
+    backButtonNew.isVisible = false ]]
 
   -- GAME PHYSICS --
   local physics = require("physics")
@@ -197,26 +197,31 @@ local function mageIconClicked() --when the mage is clicked start new game
       physics.setGravity(0, 0)
 
   -- VARIABLES --
-  local livesP = 1
-  local livesF = 1
-  local died = false
-  local Player
+  local livesPlayer = 1
+  local livesEnemy = 1
+  local isPlayerDead = false
+  local experience = 0
+  local playerLevel = 0
+  local mapLevel = 0
 
   -- PLAYER PHYSICS --
-  local function Player()
-      local Player = display.newImageRect(mainGroup,"Player.png", 100, 100)
-      physics.addBody(Player, {radius=40, isSensor=true})
-      Player.myName = "Player"
-  end
+  local player = display.newImageRect(mainGroup,"Player.png", 72, 72) -- (72x72)pixels per box to have 400 positions on the map. 20per row.
+  player.x = display.contentCenterX
+  player.y = display.contentCenterY
 
   -- wall physics --
-  local Walls = display.newImageRect( mainGroup,"Walls.jpg", 500, 600)
-      Walls.x = display.contentCenterX-700
-      Walls.y = display.contentCenterY-400
-      physics.addBody(Walls, "static")
-      Walls.isVisible = false --hiding this to work on UI -Kubo
+  local Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
+  Walls.x = display.contentCenterX-700
+  Walls.y = display.contentCenterY-400
 
+  -- enemy --
+  local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
+  enemy.x = display.contentCenterX+700
+  enemy.y = display.contentCenterY-400
+
+--[[
 end --end for mageIconClicked
 mageIcon:addEventListener( "tap", mageIconClicked ) --Points to mageIconClicked
 --mageIcon is getting bigger and bigger now when you go back and forth to main menu
 --fuck this im done for now
+]]
