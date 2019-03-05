@@ -251,23 +251,20 @@ local function mageIconClicked() --when the mage is clicked start new game
 
     local function onKeyEvent(event)
       if(event.keyName =="w") then
-      --/character= display.newImage("Player.png", 72,72)
-        transition.moveTo( player, { x=player.x, y=player.y-72, time=500 } )
+      while(event.phase == "began") do
+          transition.moveTo( player, { x=player.x, y=player.y-72, time=200 } )
+        end
       end
       if(event.keyName =="a") then
-      --/character= display.newImage("Player.png", 72,72)
         transition.moveTo( player, { x=player.x-72, y=player.y, time=500 } )
       end
       if(event.keyName =="s") then
-      --/character= display.newImage("Player.png", 72,72)
         transition.moveTo( player, { x=player.x, y=player.y+72, time=500 } )
       end
       if(event.keyName =="d") then
-      --/character= display.newImage("Player.png", 72,72)
         transition.moveTo( player, { x=player.x+72, y=player.y, time=500 } )
       end
       if(event.keyName =="e") then
-      --/character= display.newImage("Player.png", 72,72)
         transition.moveTo( player, { x=player.x+72, y=player.y-72, time=500 } )
       end
     end
