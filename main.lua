@@ -5,7 +5,12 @@ local mouseHover = require 'plugin.mouseHover' -- requiring a plugin for mouseov
 local backGroup = display.newGroup()         --Background assets
 local uiGroup = display.newGroup()           --UI assets
 local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
---[[
+
+-- Sounds & Music --
+local backgroundMusic = audio.loadStream("♂️ Lil Peep & XXXTENTACION - Falling Down ♂️ (RIGHT VERSION).mp3") --loads music in small chunks to save memory
+local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
+audio.setMaxVolume(0.3, {channel=1}) --sets max volume to 0.3
+
 -- UI BACKGROUND --
 local background = display.newImageRect( backGroup, "ui_background.png", 1920, 1080 ) --declaring background image
     background.x = display.contentCenterX
@@ -108,9 +113,18 @@ local function menuClicked() --When menu is clicked
                backButtonMenu:scale(0.90909,0.90909)
         end
     end
-
     backButtonMenu:addEventListener( "mouseHover", onMouseHoverBack ) --points to the function above
 
+    local function muteBgmButton() --mutes and unmutes bgm when clicked
+      local isOn = true
+      if isOn == true then
+        backgroundMusic.fadeOut({channel=1, time=5000 })
+      elseif isOn == false then
+        audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,})
+      end
+    end
+    muteBgm.addEventListener("tap", muteBgmButton)
+--http://docs.coronalabs.com/api/library/widget/newSlider.html
     local function backToStart() --goes back to starting screen
         continueButton.isVisible = true
         newButton.isVisible = true
@@ -189,13 +203,12 @@ local function mageIconClicked() --when the mage is clicked start new game
     mageIcon.isVisible = false
     chooseClass.isVisible = false
     background.isVisible = false
-    backButtonNew.isVisible = false ]]
+    backButtonNew.isVisible = false
 
   -- GAME PHYSICS --
   local physics = require("physics")
       physics.start()
       physics.setGravity(0, 0)
-
 
   -- VARIABLES --
   local livesPlayer = 1
@@ -215,54 +228,13 @@ local function mageIconClicked() --when the mage is clicked start new game
   Walls.x = display.contentCenterX-700
   Walls.y = display.contentCenterY-400
 
-
   -- enemy --
   local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
   enemy.x = display.contentCenterX+700
   enemy.y = display.contentCenterY-400
 
-  -- background --       -- block this with walls to make it seem like the floor --
-  local floor = display.newImageRect( uiGroup, "FLOORBACK.png", 1920, 1080 ) -- declaring continue button
-  floor.x = display.contentCenterX
-  floor.y = display.contentCenterY
 
-  local function move()
-    character= display.newImage("Player.png", 72,72)
-  character.x = display.contentCenterX
-  character.y = display.contentCenterY
-  transition.moveTo( character, { x=0, y=0, time=50000 } )
-
-
-    end
-
-  local function onKeyEvent(event)
-    if(event.keyName =="w") then
-    --/character= display.newImage("Player.png", 72,72)
-      transition.moveTo( player, { x=player.x, y=player.y-72, time=500 } )
-    end
-    if(event.keyName =="a") then
-    --/character= display.newImage("Player.png", 72,72)
-      transition.moveTo( player, { x=player.x-72, y=player.y, time=500 } )
-    end
-    if(event.keyName =="s") then
-    --/character= display.newImage("Player.png", 72,72)
-      transition.moveTo( player, { x=player.x, y=player.y+72, time=500 } )
-    end
-    if(event.keyName =="d") then
-    --/character= display.newImage("Player.png", 72,72)
-      transition.moveTo( player, { x=player.x+72, y=player.y, time=500 } )
-    end
-    if(event.keyName =="e") then
-    --/character= display.newImage("Player.png", 72,72)
-      transition.moveTo( player, { x=player.x+72, y=player.y-72, time=500 } )
-    end
-  end
-  Runtime:addEventListener("key", onKeyEvent)
-
-
---[[
 end --end for mageIconClicked
 mageIcon:addEventListener( "tap", mageIconClicked ) --Points to mageIconClicked
 --mageIcon is getting bigger and bigger now when you go back and forth to main menu
 --fuck this im done for now
-]]
