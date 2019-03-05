@@ -205,33 +205,73 @@ local function mageIconClicked() --when the mage is clicked start new game
     background.isVisible = false
     backButtonNew.isVisible = false
 
-  -- GAME PHYSICS --
-  local physics = require("physics")
-      physics.start()
-      physics.setGravity(0, 0)
+    -- GAME PHYSICS --
+    local physics = require("physics")
+        physics.start()
+        physics.setGravity(0, 0)
 
-  -- VARIABLES --
-  local livesPlayer = 1
-  local livesEnemy = 1
-  local isPlayerDead = false
-  local experience = 0
-  local playerLevel = 0
-  local mapLevel = 0
 
-  -- PLAYER PHYSICS --
-  local player = display.newImageRect(mainGroup,"Player.png", 72, 72) -- (72x72)pixels per box to have 400 positions on the map. 20per row.
-  player.x = display.contentCenterX
-  player.y = display.contentCenterY
+    -- VARIABLES --
+    local livesPlayer = 1
+    local livesEnemy = 1
+    local isPlayerDead = false
+    local experience = 0
+    local playerLevel = 0
+    local mapLevel = 0
 
-  -- wall physics --
-  local Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
-  Walls.x = display.contentCenterX-700
-  Walls.y = display.contentCenterY-400
+    -- PLAYER PHYSICS --
+    local player = display.newImageRect(mainGroup,"Player.png", 72, 72) -- (72x72)pixels per box to have 400 positions on the map. 20per row.
+    player.x = display.contentCenterX
+    player.y = display.contentCenterY
 
-  -- enemy --
-  local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
-  enemy.x = display.contentCenterX+700
-  enemy.y = display.contentCenterY-400
+    -- wall physics --
+    local Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
+    Walls.x = display.contentCenterX-700
+    Walls.y = display.contentCenterY-400
+
+
+    -- enemy --
+    local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
+    enemy.x = display.contentCenterX+700
+    enemy.y = display.contentCenterY-400
+
+    -- background --       -- block this with walls to make it seem like the floor --
+    local floor = display.newImageRect( uiGroup, "FLOORBACK.jpg", 1920, 1080 ) -- declaring continue button
+    floor.x = display.contentCenterX
+    floor.y = display.contentCenterY
+
+    local function move()
+      character= display.newImage("Player.png", 72,72)
+    character.x = display.contentCenterX
+    character.y = display.contentCenterY
+    transition.moveTo( character, { x=0, y=0, time=50000 } )
+
+
+      end
+
+    local function onKeyEvent(event)
+      if(event.keyName =="w") then
+      --/character= display.newImage("Player.png", 72,72)
+        transition.moveTo( player, { x=player.x, y=player.y-72, time=500 } )
+      end
+      if(event.keyName =="a") then
+      --/character= display.newImage("Player.png", 72,72)
+        transition.moveTo( player, { x=player.x-72, y=player.y, time=500 } )
+      end
+      if(event.keyName =="s") then
+      --/character= display.newImage("Player.png", 72,72)
+        transition.moveTo( player, { x=player.x, y=player.y+72, time=500 } )
+      end
+      if(event.keyName =="d") then
+      --/character= display.newImage("Player.png", 72,72)
+        transition.moveTo( player, { x=player.x+72, y=player.y, time=500 } )
+      end
+      if(event.keyName =="e") then
+      --/character= display.newImage("Player.png", 72,72)
+        transition.moveTo( player, { x=player.x+72, y=player.y-72, time=500 } )
+      end
+    end
+    Runtime:addEventListener("key", onKeyEvent)
 
 
 end --end for mageIconClicked
