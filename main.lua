@@ -113,9 +113,18 @@ local function menuClicked() --When menu is clicked
                backButtonMenu:scale(0.90909,0.90909)
         end
     end
-
     backButtonMenu:addEventListener( "mouseHover", onMouseHoverBack ) --points to the function above
 
+    local function muteBgmButton() --mutes and unmutes bgm when clicked
+      local isOn = true
+      if isOn == true then
+        backgroundMusic.fadeOut({channel=1, time=5000 })
+      elseif isOn == false then
+        audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,})
+      end
+    end
+    muteBgm.addEventListener("tap", muteBgmButton)
+--http://docs.coronalabs.com/api/library/widget/newSlider.html
     local function backToStart() --goes back to starting screen
         continueButton.isVisible = true
         newButton.isVisible = true
