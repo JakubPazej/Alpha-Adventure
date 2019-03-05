@@ -5,7 +5,11 @@ local mouseHover = require 'plugin.mouseHover' -- requiring a plugin for mouseov
 local backGroup = display.newGroup()         --Background assets
 local uiGroup = display.newGroup()           --UI assets
 local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
---[[
+
+-- Sounds & Music --
+local backgroundMusic = audio.loadStream("♂️ Lil Peep & XXXTENTACION - Falling Down ♂️ (RIGHT VERSION).mp3") --loads music in small chunks to save memory
+local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
+audio.setMaxVolume(0.3, {channel=1}) --sets max volume to half
 -- UI BACKGROUND --
 local background = display.newImageRect( backGroup, "ui_background.png", 1920, 1080 ) --declaring background image
     background.x = display.contentCenterX
@@ -189,7 +193,7 @@ local function mageIconClicked() --when the mage is clicked start new game
     mageIcon.isVisible = false
     chooseClass.isVisible = false
     background.isVisible = false
-    backButtonNew.isVisible = false ]]
+    backButtonNew.isVisible = false
 
   -- GAME PHYSICS --
   local physics = require("physics")
@@ -219,9 +223,8 @@ local function mageIconClicked() --when the mage is clicked start new game
   enemy.x = display.contentCenterX+700
   enemy.y = display.contentCenterY-400
 
---[[
+
 end --end for mageIconClicked
 mageIcon:addEventListener( "tap", mageIconClicked ) --Points to mageIconClicked
 --mageIcon is getting bigger and bigger now when you go back and forth to main menu
 --fuck this im done for now
-]]
