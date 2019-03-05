@@ -9,7 +9,8 @@ local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 -- Sounds & Music --
 local backgroundMusic = audio.loadStream("♂️ Lil Peep & XXXTENTACION - Falling Down ♂️ (RIGHT VERSION).mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
-audio.setMaxVolume(0.3, {channel=1}) --sets max volume to 0.3
+local bgVolume = 0.3
+audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to 0.3
 
 -- UI BACKGROUND --
 local background = display.newImageRect( backGroup, "ui_background.png", 1920, 1080 ) --declaring background image
@@ -85,6 +86,20 @@ local menuButtonLight = display.newImageRect( uiGroup, "menubuttonlight.png", 65
     menuButtonLight.y = display.contentCenterY + 200
     menuButtonLight.isVisible = false
 
+local soundOnBox = display.newImageRect(uiGroup, "soundOn.png", 115, 112)
+    soundOnBox.x = display.contentCenterX - 750
+    soundOnBox.y = display.contentCenterY - 300
+    soundOnBox.isVisible = false
+
+local soundOffBox = display.newImageRect(uiGroup, "soundOff.png", 115, 112)
+    soundOffBox.x = display.contentCenterX - 750
+    soundOffBox.y = display.contentCenterY - 300
+    soundOffBox.isVisible = false
+
+local soundText = display.newText( uiGroup,"Background Music", display.contentCenterX - 450, display.contentCenterY - 300, native.systemFont, 50  )
+    soundText:setFillColor(255, 0, 255) --Declaring the text, Lua uses RGB Colours
+    soundText.isVisible = false
+
 local onMouseHover3 = function(event) -- Button lights up when hovered over
     if event.phase == "began" then
             event.target.isVisible = true
@@ -101,6 +116,14 @@ local function menuClicked() --When menu is clicked
     menuButton.isVisible = false
     menuButtonLight.isVisible = false
     exitButton.isVisible = false
+    if audio.isChannelActive( 1 ) == true then
+      soundOnBox.isVisible = true
+      soundOffBox.isVisible = false
+    elseif audio.isChannelActive( 1 ) == false then
+      soundOnBox.isVisible = false
+      soundOffBox.isVisible = true
+    end
+    soundText.isVisible = true
 
     local backButtonMenu = display.newImageRect( uiGroup, "backbutton.png", 71, 101) --declaring back button
         backButtonMenu.x = 71 -- I declared two separate back buttons for new game and menu because
@@ -116,21 +139,32 @@ local function menuClicked() --When menu is clicked
     backButtonMenu:addEventListener( "mouseHover", onMouseHoverBack ) --points to the function above
 
     local function muteBgmButton() --mutes and unmutes bgm when clicked
-      local isOn = true
-      if isOn == true then
-        backgroundMusic.fadeOut({channel=1, time=5000 })
-      elseif isOn == false then
+      if audio.isChannelActive( 1 ) == true then
+        audio.fadeOut({channel=1, time=1000 })
+        soundOnBox.isVisible = false
+        soundOffBox.isVisible = true
+      elseif audio.isChannelActive( 1 ) == false then
+        audio.setVolume(bgVolume, {channel=1})
         audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,})
+        soundOnBox.isVisible = true
+        soundOffBox.isVisible = false
       end
     end
-    muteBgm.addEventListener("tap", muteBgmButton)
+    soundOnBox:addEventListener("tap", muteBgmButton)
+    soundOffBox:addEventListener("tap", muteBgmButton)
+
 --http://docs.coronalabs.com/api/library/widget/newSlider.html
+--sound button is bugged...when ticking and going back out and in
     local function backToStart() --goes back to starting screen
         continueButton.isVisible = true
         newButton.isVisible = true
         menuButton.isVisible = true
         backButtonMenu.isVisible = false
         exitButton.isVisible = true
+        soundText.isVisible = false
+        soundOnBox.isVisible = false
+        soundOffBox.isVisible = false
+
     end
     backButtonMenu:addEventListener("tap", backToStart) --points to the function above
 end
