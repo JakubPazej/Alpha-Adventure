@@ -10,7 +10,7 @@ local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 local backgroundMusic = audio.loadStream("♂️ Lil Peep & XXXTENTACION - Falling Down ♂️ (RIGHT VERSION).mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
 local bgVolume = 0.3
-audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to 0.3
+audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to 0.3 
 
 -- UI BACKGROUND --
 local background = display.newImageRect( backGroup, "ui_background.png", 1920, 1080 ) --declaring background image
@@ -276,14 +276,16 @@ local function mageIconClicked() --when the mage is clicked start new game
 
     -- wall physics --
     local Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
-    Walls.x = display.contentCenterX-700
-    Walls.y = display.contentCenterY-400
+    Walls.x = display.contentCenterX-720
+    Walls.y = display.contentCenterY-432
+    physics.addBody( Walls, "static" ,{density=8 ,friction=2, bounce=0.03} )
+    physics.addBody( player, "dynamic" )
 
 
     -- enemy --
     local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
-    enemy.x = display.contentCenterX+700
-    enemy.y = display.contentCenterY-400
+    enemy.x = display.contentCenterX+720
+    enemy.y = display.contentCenterY-432
 
     -- background --       -- block this with walls to make it seem like the floor --
     local floor = display.newImageRect( uiGroup, "FLOORBACK.jpg", 1920, 1080 ) -- declaring continue button
@@ -299,22 +301,18 @@ local function mageIconClicked() --when the mage is clicked start new game
       end
 
     local function onKeyEvent(event)
+      local i = 1
       if(event.keyName =="w") then
-      while(event.phase == "began") do
-          transition.moveTo( player, { x=player.x, y=player.y-72, time=200 } )
-        end
+        transition.moveTo( player, { x=player.x, y=player.y-72, time=700 } )
       end
       if(event.keyName =="a") then
-        transition.moveTo( player, { x=player.x-72, y=player.y, time=500 } )
+        transition.moveTo( player, { x=player.x-72, y=player.y, time=700 } )
       end
       if(event.keyName =="s") then
-        transition.moveTo( player, { x=player.x, y=player.y+72, time=500 } )
+        transition.moveTo( player, { x=player.x, y=player.y+72, time=700 } )
       end
       if(event.keyName =="d") then
-        transition.moveTo( player, { x=player.x+72, y=player.y, time=500 } )
-      end
-      if(event.keyName =="e") then
-        transition.moveTo( player, { x=player.x+72, y=player.y-72, time=500 } )
+        transition.moveTo( player, { x=player.x+72, y=player.y, time=700 } )
       end
     end
     Runtime:addEventListener("key", onKeyEvent)
