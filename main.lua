@@ -86,16 +86,6 @@ local menuButtonLight = display.newImageRect( uiGroup, "menubuttonlight.png", 65
     menuButtonLight.y = display.contentCenterY + 200
     menuButtonLight.isVisible = false
 
-local soundOnBox = display.newImageRect(uiGroup, "soundOn.png", 115, 112)
-    soundOnBox.x = display.contentCenterX - 750
-    soundOnBox.y = display.contentCenterY - 300
-    soundOnBox.isVisible = false
-
-local soundOffBox = display.newImageRect(uiGroup, "soundOff.png", 115, 112)
-    soundOffBox.x = display.contentCenterX - 750
-    soundOffBox.y = display.contentCenterY - 300
-    soundOffBox.isVisible = false
-
 local soundText = display.newText( uiGroup,"Background Music", display.contentCenterX - 450, display.contentCenterY - 300, native.systemFont, 50  )
     soundText:setFillColor(255, 0, 255) --Declaring the text, Lua uses RGB Colours
     soundText.isVisible = false
@@ -116,6 +106,18 @@ local function menuClicked() --When menu is clicked
     menuButton.isVisible = false
     menuButtonLight.isVisible = false
     exitButton.isVisible = false
+    soundText.isVisible = true
+
+    local soundOnBox = display.newImageRect(uiGroup, "soundOn.png", 115, 112)
+        soundOnBox.x = display.contentCenterX - 750
+        soundOnBox.y = display.contentCenterY - 300
+        soundOnBox.isVisible = false
+
+    local soundOffBox = display.newImageRect(uiGroup, "soundOff.png", 115, 112)
+        soundOffBox.x = display.contentCenterX - 750
+        soundOffBox.y = display.contentCenterY - 300
+        soundOffBox.isVisible = false
+
     if audio.isChannelActive( 1 ) == true then
       soundOnBox.isVisible = true
       soundOffBox.isVisible = false
@@ -123,7 +125,6 @@ local function menuClicked() --When menu is clicked
       soundOnBox.isVisible = false
       soundOffBox.isVisible = true
     end
-    soundText.isVisible = true
 
     local backButtonMenu = display.newImageRect( uiGroup, "backbutton.png", 71, 101) --declaring back button
         backButtonMenu.x = 71 -- I declared two separate back buttons for new game and menu because
@@ -154,7 +155,6 @@ local function menuClicked() --When menu is clicked
     soundOffBox:addEventListener("tap", muteBgmButton)
 
 --http://docs.coronalabs.com/api/library/widget/newSlider.html
---sound button is bugged...when ticking and going back out and in
     local function backToStart() --goes back to starting screen
         continueButton.isVisible = true
         newButton.isVisible = true
@@ -162,8 +162,8 @@ local function menuClicked() --When menu is clicked
         backButtonMenu.isVisible = false
         exitButton.isVisible = true
         soundText.isVisible = false
-        soundOnBox.isVisible = false
-        soundOffBox.isVisible = false
+        soundOnBox:removeSelf()
+        soundOffBox:removeSelf()
 
     end
     backButtonMenu:addEventListener("tap", backToStart) --points to the function above
@@ -171,19 +171,9 @@ end
 menuButton:addEventListener("tap", menuClicked) --points to the function that triggers menu clicked functions
 
 -- NEW GAME PRESSED --
-local mageIcon = display.newImageRect(uiGroup, "Badge_mage.png", 500, 500) --declaring the mage image
-mageIcon.x = display.contentCenterX
-mageIcon.y = display.contentCenterY
-mageIcon.isVisible = false
-
 local chooseClass = display.newText( uiGroup,"Choose Your Class!", display.contentCenterX, display.contentCenterY - 300, native.systemFont, 80  )
     chooseClass:setFillColor(255, 0, 255) --Declaring the text, Lua uses RGB Colours
     chooseClass.isVisible = false
-
-local backButtonNew = display.newImageRect( uiGroup, "backbutton.png", 71, 101) --declaring second back button
-    backButtonNew.x = 71
-    backButtonNew.y = 73
-    backButtonNew.isVisible = false
 
 local function newButton_tap() --goes to new game options
     continueButton.isVisible = false
@@ -191,9 +181,15 @@ local function newButton_tap() --goes to new game options
     newButtonLight.isVisible = false
     menuButton.isVisible = false
     exitButton.isVisible = false
-    mageIcon.isVisible = true
     chooseClass.isVisible = true
-    backButtonNew.isVisible = true
+
+    local mageIcon = display.newImageRect(uiGroup, "Badge_mage.png", 500, 500) --declaring the mage image
+    mageIcon.x = display.contentCenterX
+    mageIcon.y = display.contentCenterY
+
+    local backButtonNew = display.newImageRect( uiGroup, "backbutton.png", 71, 101) --declaring second back button
+        backButtonNew.x = 71
+        backButtonNew.y = 73
 
     local onMouseHoverMage = function(event) --mage image gets bigger when hovered over
         if event.phase == "began" then
@@ -221,9 +217,9 @@ local function newButton_tap() --goes to new game options
         mageIcon.isVisible = false
         chooseClass.isVisible = false
         exitButton.isVisible = true
-        mageIcon.isVisible = false
+        mageIcon:removeSelf()
         chooseClass.isVisible = false
-        backButtonNew.isVisible = false
+        backButtonNew:removeSelf()
     end
     backButtonNew:addEventListener("tap", backToStart) --points to the function above
 end
@@ -280,7 +276,6 @@ local function mageIconClicked() --when the mage is clicked start new game
     character.y = display.contentCenterY
     transition.moveTo( character, { x=0, y=0, time=50000 } )
 
-
       end
 
     local function onKeyEvent(event)
@@ -306,6 +301,4 @@ local function mageIconClicked() --when the mage is clicked start new game
 
 
 end --end for mageIconClicked
-mageIcon:addEventListener( "tap", mageIconClicked ) --Points to mageIconClicked
---mageIcon is getting bigger and bigger now when you go back and forth to main menu
---fuck this im done for now
+mageIcon:addEventListener( "tap", mageIconClicked )
