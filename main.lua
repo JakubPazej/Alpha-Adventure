@@ -108,7 +108,7 @@ local function menuClicked() --When menu is clicked
     exitButton.isVisible = false
     soundText.isVisible = true
 
-    local soundOnBox = display.newImageRect(uiGroup, "soundOn.png", 115, 112)
+    local soundOnBox = display.newImageRect(uiGroup, "soundOn.png", 115, 112) --declaring the soundboxes
         soundOnBox.x = display.contentCenterX - 750
         soundOnBox.y = display.contentCenterY - 300
         soundOnBox.isVisible = false
@@ -118,7 +118,7 @@ local function menuClicked() --When menu is clicked
         soundOffBox.y = display.contentCenterY - 300
         soundOffBox.isVisible = false
 
-    if audio.isChannelActive( 1 ) == true then
+    if audio.isChannelActive( 1 ) == true then --channel one is bgm
       soundOnBox.isVisible = true
       soundOffBox.isVisible = false
     elseif audio.isChannelActive( 1 ) == false then
@@ -141,7 +141,7 @@ local function menuClicked() --When menu is clicked
 
     local function muteBgmButton() --mutes and unmutes bgm when clicked
       if audio.isChannelActive( 1 ) == true then
-        audio.fadeOut({channel=1, time=1000 })
+        audio.fadeOut({channel=1, time=500 })
         soundOnBox.isVisible = false
         soundOffBox.isVisible = true
       elseif audio.isChannelActive( 1 ) == false then
@@ -153,8 +153,20 @@ local function menuClicked() --When menu is clicked
     end
     soundOnBox:addEventListener("tap", muteBgmButton)
     soundOffBox:addEventListener("tap", muteBgmButton)
+----------------------------------------------------------------------------------------
+    local widget = require("widget")
 
---http://docs.coronalabs.com/api/library/widget/newSlider.html
+    -- Create the widget
+    local slider = widget.newSlider(
+        {
+            x = display.contentCenterX - 450,
+            y = display.contentCenterY - 200,
+            width = 400,
+            value = bgVolume,  -- Start slider at bgVolume
+        }
+    )
+    --not working yet
+----------------------------------------------------------------------------------------
     local function backToStart() --goes back to starting screen
         continueButton.isVisible = true
         newButton.isVisible = true
@@ -164,6 +176,7 @@ local function menuClicked() --When menu is clicked
         soundText.isVisible = false
         soundOnBox:removeSelf()
         soundOffBox:removeSelf()
+        slider:removeSelf()
 
     end
     backButtonMenu:addEventListener("tap", backToStart) --points to the function above
@@ -175,6 +188,16 @@ local chooseClass = display.newText( uiGroup,"Choose Your Class!", display.conte
     chooseClass:setFillColor(255, 0, 255) --Declaring the text, Lua uses RGB Colours
     chooseClass.isVisible = false
 
+local mageIcon = display.newImageRect(uiGroup, "Badge_mage.png", 500, 500) --declaring the mage image
+    mageIcon.x = display.contentCenterX
+    mageIcon.y = display.contentCenterY
+    mageIcon.isVisible = false
+
+local mageIconHover = display.newImageRect(uiGroup, "Badge_mage.png", 550, 550) --declaring the bigger mage image
+    mageIconHover.x = display.contentCenterX
+    mageIconHover.y = display.contentCenterY
+    mageIconHover.isVisible = false
+
 local function newButton_tap() --goes to new game options
     continueButton.isVisible = false
     newButton.isVisible = false
@@ -182,10 +205,7 @@ local function newButton_tap() --goes to new game options
     menuButton.isVisible = false
     exitButton.isVisible = false
     chooseClass.isVisible = true
-
-    local mageIcon = display.newImageRect(uiGroup, "Badge_mage.png", 500, 500) --declaring the mage image
-    mageIcon.x = display.contentCenterX
-    mageIcon.y = display.contentCenterY
+    mageIcon.isVisible = true
 
     local backButtonNew = display.newImageRect( uiGroup, "backbutton.png", 71, 101) --declaring second back button
         backButtonNew.x = 71
@@ -193,9 +213,11 @@ local function newButton_tap() --goes to new game options
 
     local onMouseHoverMage = function(event) --mage image gets bigger when hovered over
         if event.phase == "began" then
-                  mageIcon:scale(1.1,1.1)
+                  mageIconHover.isVisible = true
+                  mageIcon.alpha = 0.01
         elseif event.phase == "ended" then
-                      mageIcon:scale(0.90909,0.90909)
+                  mageIconHover.isVisible = false
+                  mageIcon.alpha = 1
         end
     end
     mageIcon:addEventListener( "mouseHover", onMouseHoverMage ) --Points to the function above
@@ -217,7 +239,6 @@ local function newButton_tap() --goes to new game options
         mageIcon.isVisible = false
         chooseClass.isVisible = false
         exitButton.isVisible = true
-        mageIcon:removeSelf()
         chooseClass.isVisible = false
         backButtonNew:removeSelf()
     end
@@ -233,7 +254,6 @@ local function mageIconClicked() --when the mage is clicked start new game
     mageIcon.isVisible = false
     chooseClass.isVisible = false
     background.isVisible = false
-    backButtonNew.isVisible = false
 
     -- GAME PHYSICS --
     local physics = require("physics")
