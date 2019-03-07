@@ -7,10 +7,10 @@ local uiGroup = display.newGroup()           --UI assets
 local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 
 -- Sounds & Music --
-local backgroundMusic = audio.loadStream("♂️ Lil Peep & XXXTENTACION - Falling Down ♂️ (RIGHT VERSION).mp3") --loads music in small chunks to save memory
+--[[local backgroundMusic = audio.loadStream("♂️ Lil Peep & XXXTENTACION - Falling Down ♂️ (RIGHT VERSION).mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
 local bgVolume = 0.3
-audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to 0.3 
+audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to 0.3 ]]
 
 -- UI BACKGROUND --
 local background = display.newImageRect( backGroup, "ui_background.png", 1920, 1080 ) --declaring background image
@@ -273,13 +273,15 @@ local function mageIconClicked() --when the mage is clicked start new game
     local player = display.newImageRect(mainGroup,"Player.png", 72, 72) -- (72x72)pixels per box to have 400 positions on the map. 20per row.
     player.x = display.contentCenterX
     player.y = display.contentCenterY
+    player.isFixedRotation=true
 
     -- wall physics --
-    local Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
+    local Walls = display.newImageRect( mainGroup,"Walls.jpg", 720, 720)
     Walls.x = display.contentCenterX-720
     Walls.y = display.contentCenterY-432
-    physics.addBody( Walls, "static" ,{density=8 ,friction=2, bounce=0.03} )
-    physics.addBody( player, "dynamic" )
+    physics.addBody( Walls, "static" ,{ bounce=-1} )
+    physics.addBody( player, "dynamic"  )
+
 
 
     -- enemy --
@@ -303,7 +305,8 @@ local function mageIconClicked() --when the mage is clicked start new game
     local function onKeyEvent(event)
       local i = 1
       if(event.keyName =="w") then
-        transition.moveTo( player, { x=player.x, y=player.y-72, time=700 } )
+        player:applyLinearImpulse(0,-0.05, player.x,player.y)
+        --transition.moveTo( player, { x=player.x, y=player.y-72, time=700 } )
       end
       if(event.keyName =="a") then
         transition.moveTo( player, { x=player.x-72, y=player.y, time=700 } )
