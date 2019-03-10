@@ -309,13 +309,16 @@ local function mageIconClicked() --when the mage is clicked start new game
         --transition.moveTo( player, { x=player.x, y=player.y-72, time=700 } )
       end
       if(event.keyName =="a") then
-        transition.moveTo( player, { x=player.x-72, y=player.y, time=700 } )
+        player:applyLinearImpulse(-0.05,0, player.x,player.y)
+        --transition.moveTo( player, { x=player.x-72, y=player.y, time=700 } )
       end
       if(event.keyName =="s") then
-        transition.moveTo( player, { x=player.x, y=player.y+72, time=700 } )
+        player:applyLinearImpulse(0,0.05, player.x,player.y)
+        --transition.moveTo( player, { x=player.x, y=player.y+72, time=700 } )
       end
       if(event.keyName =="d") then
-        transition.moveTo( player, { x=player.x+72, y=player.y, time=700 } )
+        player:applyLinearImpulse(0.05,0, player.x,player.y)
+        --transition.moveTo( player, { x=player.x+72, y=player.y, time=700 } )
       end
     end
     Runtime:addEventListener("key", onKeyEvent)
