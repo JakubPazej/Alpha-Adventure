@@ -325,30 +325,38 @@ local function mageIconClicked() --when the mage is clicked start new game
     end]]
     if event.keyName == "a" then
        if event.phase == "down" then
-          transition.to(player, {time = 3000, x = player.x - 1000})
+         player:applyLinearImpulse(-.5,0)
+          --transition.to(player, {time = 3000, x = player.x - 1000})
         elseif event.phase == "up" then
-          transition.cancel()
+          player:applyLinearImpulse(0.5,0)
+          --transition.cancel()
        end
     end
     if event.keyName == "d" then
        if event.phase == "down" then
-          transition.to(player, {time = 3000, x = player.x  + 1000})
+         player:applyLinearImpulse(.5,0)
+          --transition.to(player, {time = 3000, x = player.x  + 1000})
         elseif event.phase == "up" then
-          transition.cancel()
+          player:applyLinearImpulse(-.5,0)
+          --transition.cancel()
        end
     end
     if event.keyName == "w" then
        if event.phase == "down" then
-          transition.to(player, {time = 3000, y = player.y  - 1000})
+         player:applyLinearImpulse(0,-.5)
+          --transition.to(player, {time = 3000, y = player.y  - 1000})
         elseif event.phase == "up" then
-          transition.cancel()
+          player:applyLinearImpulse(0,.5)
+          --transition.cancel()
        end
     end
     if event.keyName == "s" then
        if event.phase == "down" then
-          transition.to(player, {time = 3000, y = player.y  + 1000})
+         player:applyLinearImpulse(0,.5)
+          --transition.to(player, {time = 3000, y = player.y  + 1000})
         elseif event.phase == "up" then
-          transition.cancel()
+          player:applyLinearImpulse(0,-.5)
+          --transition.cancel()
        end
     end
 end
