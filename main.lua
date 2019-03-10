@@ -279,7 +279,7 @@ local function mageIconClicked() --when the mage is clicked start new game
     local Walls = display.newImageRect( mainGroup,"Walls.jpg", 720, 720)
     Walls.x = display.contentCenterX-720
     Walls.y = display.contentCenterY-432
-    physics.addBody( Walls, "static" ,{ bounce=-1} )
+    physics.addBody( Walls, "static"  )
     physics.addBody( player, "dynamic"  )
 
 
@@ -325,37 +325,37 @@ local function mageIconClicked() --when the mage is clicked start new game
     end]]
     if event.keyName == "a" then
        if event.phase == "down" then
-         player:applyLinearImpulse(-.5,0)
+         player:applyLinearImpulse(-.5,0,player.x,player.y)
           --transition.to(player, {time = 3000, x = player.x - 1000})
         elseif event.phase == "up" then
-          player:applyLinearImpulse(0.5,0)
+          player:applyLinearImpulse(0.5,0,player.x,player.y)
           --transition.cancel()
        end
     end
     if event.keyName == "d" then
        if event.phase == "down" then
-         player:applyLinearImpulse(.5,0)
+         player:applyLinearImpulse(.5,0,player.x,player.y)
           --transition.to(player, {time = 3000, x = player.x  + 1000})
         elseif event.phase == "up" then
-          player:applyLinearImpulse(-.5,0)
+          player:applyLinearImpulse(-.5,0,player.x,player.y)
           --transition.cancel()
        end
     end
     if event.keyName == "w" then
        if event.phase == "down" then
-         player:applyLinearImpulse(0,-.5)
+         player:applyLinearImpulse(0,-.5,player.x,player.y)
           --transition.to(player, {time = 3000, y = player.y  - 1000})
         elseif event.phase == "up" then
-          player:applyLinearImpulse(0,.5)
+          player:applyLinearImpulse(0,.5,player.x,player.y)
           --transition.cancel()
        end
     end
     if event.keyName == "s" then
        if event.phase == "down" then
-         player:applyLinearImpulse(0,.5)
+         player:applyLinearImpulse(0,.5,player.x,player.y)
           --transition.to(player, {time = 3000, y = player.y  + 1000})
         elseif event.phase == "up" then
-          player:applyLinearImpulse(0,-.5)
+          player:applyLinearImpulse(0,-.5,player.x,player.y)
           --transition.cancel()
        end
     end
