@@ -259,8 +259,6 @@ local function mageIconClicked() --when the mage is clicked start new game
     local physics = require("physics")
         physics.start()
         physics.setGravity(0, 0)
-    -- Activate multitouch
-      system.activate( "multitouch" )
 
 
     -- VARIABLES --
@@ -297,133 +295,30 @@ local function mageIconClicked() --when the mage is clicked start new game
     floor.y = display.contentCenterY
 
     local function move()
-    character= display.newImage("Player.png", 72,72)
+      character= display.newImage("Player.png", 72,72)
     character.x = display.contentCenterX
     character.y = display.contentCenterY
     transition.moveTo( character, { x=0, y=0, time=50000 } )
 
       end
 
-    --[[  local buttonGroup = display.newGroup()
-
-      local fireButton = display.newImageRect( buttonGroup, "fireButton.png", 64, 64 )
-        fireButton.x, fireButton.y = 60, display.contentHeight-60
-
-        local groupBounds = buttonGroup.contentBounds
-        local groupRegion = display.newRect( 0, 0, groupBounds.xMax-groupBounds.xMin+200, groupBounds.yMax-groupBounds.yMin+200 )
-        groupRegion.x = groupBounds.xMin + ( buttonGroup.contentWidth/2 )
-        groupRegion.y = groupBounds.yMin + ( buttonGroup.height/2 )
-        groupRegion.isVisible = false
-        groupRegion.isHitTestable = true
-
-        local function detectButton( event )
-
-          for i = 1,buttonGroup.numChildren do
-            local bounds = buttonGroup[i].contentBounds
-            if (
-              event.x > bounds.xMin and
-              event.x < bounds.xMax and
-              event.y > bounds.yMin and
-              event.y < bounds.yMax
-            ) then
-              return buttonGroup[i]
-            end
-          end
-        end
-
-        local function handleController( event )
-
-    local touchOverButton = detectButton( event )
-
-    if ( event.phase == "began" ) then
-
-        if ( touchOverButton ~= nil ) then
-            if not ( buttonGroup.touchID ) then
-                -- Set/isolate this touch ID
-                buttonGroup.touchID = event.id
-                -- Set the active button
-                buttonGroup.activeButton = touchOverButton
-                -- Fire the weapon
-                print( "BEGIN FIRING" )
-            end
-            return true
-        end
-
-    elseif ( event.phase == "ended" and buttonGroup.activeButton ~= nil ) then
-
-        -- Release this touch ID
-        buttonGroup.touchID = nil
-        -- Set that no button is active
-        buttonGroup.activeButton = nil
-        -- Stop firing the weapon
-        print( "STOP FIRING" )
-        return true
-    end
-end]]
-
-local function walkPerson(event)
-while (event.phase == 'down') do
-  player:setLinearVelocity(0,15)
-
-
-end
-if (event.keyName == 'a' and event.phase == 'down') then
-  player.x = player.x - 15
-  return true
-end
-if (event.keyName == 'w' and event.phase == 'down') then
-  player.y = player.y - 64
-  player:setLinearVelocity( 0, 128 )
-  return true
-end
-if (event.keyName == 's' and event.phase == 'down') then
-  player:setLinearVelocity( 0, 32 )
-  return true
-end
-    return false
-end
-
-Runtime:addEventListener("key", walkPerson);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    --[[local function onKeyEvent(event)
-    --  if event.phase == "began" then
+    local function onKeyEvent(event)
       local i = 1
-
-        if(event.keyName =="w") then
-          while(event.phase ~= ended) do
-            player:applyForce(0,-10, player.x,player.y)
-          end
-          --player:setLinearVelocity(0, 15)
-          --transition.moveTo( player, { x=player.x, y=player.y-72, time=700 } )
-        end
-        if(event.keyName =="a") then
-          transition.moveTo( player, { x=player.x-72, y=player.y, time=700 } )
-        end
-        if(event.keyName =="s") then
-          transition.moveTo( player, { x=player.x, y=player.y+72, time=700 } )
-        end
-        if(event.keyName =="d") then
-          transition.moveTo( player, { x=player.x+72, y=player.y, time=700 } )
-        end
+      if(event.keyName =="w") then
+        player:applyLinearImpulse(0,-0.05, player.x,player.y)
+        --transition.moveTo( player, { x=player.x, y=player.y-72, time=700 } )
       end
-      while(event.phase =="down" and event.keyName =="w") do
-        player:applyForce(0,-10, player.x,player.y)
+      if(event.keyName =="a") then
+        transition.moveTo( player, { x=player.x-72, y=player.y, time=700 } )
+      end
+      if(event.keyName =="s") then
+        transition.moveTo( player, { x=player.x, y=player.y+72, time=700 } )
+      end
+      if(event.keyName =="d") then
+        transition.moveTo( player, { x=player.x+72, y=player.y, time=700 } )
       end
     end
-    Runtime:addEventListener("key", onKeyEvent)]]
+    Runtime:addEventListener("key", onKeyEvent)
 
 
 end --end for mageIconClicked
