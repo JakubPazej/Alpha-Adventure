@@ -273,14 +273,16 @@ local function mageIconClicked() --when the mage is clicked start new game
     local player = display.newImageRect(mainGroup,"Player.png", 72, 72) -- (72x72)pixels per box to have 400 positions on the map. 20per row.
     player.x = display.contentCenterX
     player.y = display.contentCenterY
+    physics.addBody( player, "dynamic",{density =0})
     player.isFixedRotation=true
+    player.isBullet = false
 
     -- wall physics --
     local Walls = display.newImageRect( mainGroup,"Walls.jpg", 720, 720)
     Walls.x = display.contentCenterX-720
     Walls.y = display.contentCenterY-432
-    physics.addBody( Walls, "static"  )
-    physics.addBody( player, "dynamic"  )
+    physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
+    Walls.gravityScale =0
 
 
 
@@ -294,15 +296,8 @@ local function mageIconClicked() --when the mage is clicked start new game
     floor.x = display.contentCenterX
     floor.y = display.contentCenterY
 
-    local function move()
-      character= display.newImage("Player.png", 72,72)
-    character.x = display.contentCenterX
-    character.y = display.contentCenterY
-    transition.moveTo( character, { x=0, y=0, time=50000 } )
 
-      end
 
-    local function onKeyEvent(event)
       --[[local i = 1
       if(event.keyName =="w") then
         player:applyLinearImpulse(0,-0.05, player.x,player.y)
@@ -323,6 +318,7 @@ local function mageIconClicked() --when the mage is clicked start new game
         --transition.moveTo( player, { x=player.x+72, y=player.y, time=700 } )
       end
     end]]
+    local function onKeyEvent(event)
     if event.keyName == "a" then
        if event.phase == "down" then
          player:applyLinearImpulse(-.5,0,player.x,player.y)
@@ -359,7 +355,21 @@ local function mageIconClicked() --when the mage is clicked start new game
           --transition.cancel()
        end
     end
+  end
+
+--[[  local function onLocalCollision(event)
+      physics.addBody(player,"dynamic", {density=150})
+  end
+  Walls:addEventListener("collision", onLocalCollision)]]
+  --[[local function onLocalCollision( self, event )
+    print( event.target )        --the first object in the collision
+    print( event.other )         --the second object in the collision
+    print( event.selfElement )   --the element (number) of the first object which was hit in the collision
+    print( event.otherElement )  --the element (number) of the second object which was hit in the collision
 end
+Walls.collision = onLocalCollision
+Walls:addEventListener( "collision" )]]
+
     Runtime:addEventListener("key", onKeyEvent)
 
 
