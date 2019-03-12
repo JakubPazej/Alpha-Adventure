@@ -279,7 +279,8 @@ local function mageIconClicked() --when the mage is clicked start new game
     player.isBullet = false
 
     -- wall physics --
-    local Walls
+    local Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
+    physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
     local function addWall(coordinateX, coordinateY) --adding a function to make adding a wall easier
         Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
         Walls.x = display.contentCenterX + coordinateX
@@ -320,8 +321,18 @@ local function mageIconClicked() --when the mage is clicked start new game
         end
     end
 
-addWall( 172, 172)
+--addWall( 172, 172)
+--addWall( 298, 172)
+--addWall( 356, 172)
+addWall( 360,360)
+--[[addWall( 298, 172)
 addWall( 298, 172)
+addWall( 298, 172)
+addWall( 298, 172)
+addWall( 298, 172)
+addWall( 298, 172)
+addWall( 298, 172)]]
+
 
     -- enemy --
     local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
@@ -373,10 +384,11 @@ addWall( 298, 172)
     end
   end
 
---[[  local function onLocalCollision(event)
-      physics.addBody(player,"dynamic", {density=150})
+    local function onLocalCollision(event)
+      player:setLinearVelocity(0,0)
   end
-  Walls:addEventListener("collision", onLocalCollision)]]
+  Walls.collision = onLocalCollision
+  Walls:addEventListener("collision")
   --[[local function onLocalCollision( self, event )
     print( event.target )        --the first object in the collision
     print( event.other )         --the second object in the collision
