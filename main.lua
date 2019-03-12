@@ -249,6 +249,7 @@ newButton:addEventListener( "tap", newButton_tap ) --points to the new game clic
 ----------------------------------------------------------------------------
 --GAME----------------------------------------------------------------------
 ----------------------------------------------------------------------------
+local i = 0;
 
 local function mageIconClicked() --when the mage is clicked start new game
     mageIcon.isVisible = false
@@ -278,13 +279,49 @@ local function mageIconClicked() --when the mage is clicked start new game
     player.isBullet = false
 
     -- wall physics --
-    local Walls = display.newImageRect( mainGroup,"Walls.jpg", 720, 720)
-    Walls.x = display.contentCenterX-720
-    Walls.y = display.contentCenterY-432
-    physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
-    Walls.gravityScale =0
+    local Walls
+    local function addWall(coordinateX, coordinateY) --adding a function to make adding a wall easier
+        Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
+        Walls.x = display.contentCenterX + coordinateX
+        Walls.y = display.contentCenterY + coordinateY
+        physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
+        Walls.gravityScale =0
+    end
 
+  --[[  local function onLocalCollision( self, event )
+      player:setLinearVelocity(0,0)
+    end
+    "collision"
+      Walls:addEventListener( "collision" )]]
 
+    local function addWallsLine(X1, Y1, X2, Y2) --function to add walls in lines
+        if X1 == X2 and Y1 ~= Y2 then
+          if math.abs(Y1)+math.abs(Y2) % 1 == 0 then
+            if Y1 < Y2 then
+              local temp = Y2
+              Y2 = Y1
+              Y1 = temp
+            end
+            for i = math.abs(Y1)+math.abs(Y2), i ~= 0, i - 72
+            do
+              addWall(X1, i)
+            end
+          end
+        elseif Y1 == Y2 and X1 ~= X2 then
+          if X1 < X2 then
+            local temp = X2
+            X2 = X1
+            X1 = temp
+          end
+          for i = math.abs(X1)+math.abs(X2), i ~= 0, i - 72
+          do
+            addWall(i, Y1)
+          end
+        end
+    end
+
+addWall( 172, 172)
+addWall( 298, 172)
 
     -- enemy --
     local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
@@ -349,13 +386,9 @@ end
 Walls.collision = onLocalCollision
 Walls:addEventListener( "collision" )]]
 
-    Runtime:addEventListener("key", onKeyEvent)
+--addWall(100, 100)
 
-	local function onLocalCollision( self, event )
-    player:setLinearVelocity(0,0)
-	end
-	Walls.collision = onLocalCollision
-	Walls:addEventListener( "collision" )
+    Runtime:addEventListener("key", onKeyEvent)
 
 end --end for mageIconClicked
 mageIcon:addEventListener( "tap", mageIconClicked )
