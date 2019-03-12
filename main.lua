@@ -351,6 +351,11 @@ Walls:addEventListener( "collision" )]]
 
     Runtime:addEventListener("key", onKeyEvent)
 
+	local function onLocalCollision( self, event )
+    player:setLinearVelocity(0,0)
+	end
+	Walls.collision = onLocalCollision
+	Walls:addEventListener( "collision" )
 
 end --end for mageIconClicked
 mageIcon:addEventListener( "tap", mageIconClicked )
