@@ -7,10 +7,10 @@ local uiGroup = display.newGroup()           --UI assets
 local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 
 -- Sounds & Music --
---[[local backgroundMusic = audio.loadStream("♂️ Lil Peep & XXXTENTACION - Falling Down ♂️ (RIGHT VERSION).mp3") --loads music in small chunks to save memory
+local backgroundMusic = audio.loadStream("Ram Ranch.mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
 local bgVolume = 0.3
-audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to 0.3 ]]
+audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to 0.3
 
 -- UI BACKGROUND --
 local background = display.newImageRect( backGroup, "ui_background.png", 1920, 1080 ) --declaring background image
@@ -296,28 +296,7 @@ local function mageIconClicked() --when the mage is clicked start new game
     floor.x = display.contentCenterX
     floor.y = display.contentCenterY
 
-
-
-      --[[local i = 1
-      if(event.keyName =="w") then
-        player:applyLinearImpulse(0,-0.05, player.x,player.y)
-        --transition.moveTo( player, { x=player.x, y=player.y-72, time=700 } )
-      end
-      if(event.keyName =="a") then
-        player:applyLinearImpulse(-0.05,0, player.x,player.y)
-        --transition.moveTo( player, { x=player.x-72, y=player.y, time=700 } )
-      end
-      if(event.keyName =="s") then
-        player:applyLinearImpulse(0,0.05, player.x,player.y)
-        if(event.phase==ended) then
-          player
-        --transition.moveTo( player, { x=player.x, y=player.y+72, time=700 } )
-      end
-      if(event.keyName =="d") then
-        player:applyLinearImpulse(0.05,0, player.x,player.y)
-        --transition.moveTo( player, { x=player.x+72, y=player.y, time=700 } )
-      end
-    end]]
+    -- movement wasd --
     local function onKeyEvent(event)
     if event.keyName == "a" then
        if event.phase == "down" then
