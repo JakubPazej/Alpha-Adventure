@@ -283,61 +283,56 @@ local function mageIconClicked() --when the mage is clicked start new game
     physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
     local function addWall(coordinateX, coordinateY) --adding a function to make adding a wall easier
         Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
-        Walls.x = display.contentCenterX + coordinateX
-        Walls.y = display.contentCenterY + coordinateY
+        Walls.x = coordinateX
+        Walls.y = coordinateY
         physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
         Walls.gravityScale =0
     end
 
-  --[[  local function onLocalCollision( self, event )
+  --[[  local function onLocalCollision( self, event ) --wtf is this, Jakub
       player:setLinearVelocity(0,0)
     end
     "collision"
       Walls:addEventListener( "collision" )]]
 
-    local function addWallsLine(X1, Y1, X2, Y2) --function to add walls in lines
-        if X1 == X2 and Y1 ~= Y2 then
-          if math.abs(Y1)+math.abs(Y2) % 1 == 0 then
-            if Y1 < Y2 then
-              local temp = Y2
-              Y2 = Y1
-              Y1 = temp
-            end
-            for i = math.abs(Y1)+math.abs(Y2), i ~= 0, i - 72
-            do
-              addWall(X1, i)
-            end
+    local function addWallsLine(X1, X2, Y1, Y2) --function to add walls in lines.
+      if X1 == X2 and Y1 ~= Y2 then             --This function should be considered art.
+        if Y1 > Y2 then
+          local temp = Y2
+          Y2 = Y1
+          Y1 = temp
+        end
+        if (Y2 - math.abs(Y1)) % 72 == 0 then
+          for i = Y1, Y2, i + 72
+          do
+            addWall(X1, i)
           end
+        end
         elseif Y1 == Y2 and X1 ~= X2 then
-          if X1 < X2 then
+          if X1 > X2 then
             local temp = X2
             X2 = X1
             X1 = temp
           end
-          for i = math.abs(X1)+math.abs(X2), i ~= 0, i - 72
-          do
-            addWall(i, Y1)
+          if (X2 - math.abs(X1)) % 72 == 0 then
+            for i = X1, X2, i + 72
+            do
+              addWall(i, Y1)
+            end
           end
         end
-    end
-
---addWall( 172, 172)
---addWall( 298, 172)
---addWall( 356, 172)
-addWall( 360,360)
---[[addWall( 298, 172)
-addWall( 298, 172)
-addWall( 298, 172)
-addWall( 298, 172)
-addWall( 298, 172)
-addWall( 298, 172)
-addWall( 298, 172)]]
-
+      end
+addWallsLine( 36, 1872 + 36, 1044, 1044) -- bottom, working now, for loops are different than in java, notice the middle part
+addWallsLine( 72+36, 1872 + 36, 36, 36) --top
+addWallsLine( 36, 36, 36+72, 1872 + 36 -72 ) --left
+addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
+-- I left out the top left which is the first instance of wall thats outside of addWall
+--well have to sort that out somehow
 
     -- enemy --
     local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
     enemy.x = display.contentCenterX+720
-    enemy.y = display.contentCenterY-432
+    enemy.y = display.contentCenterY-300
 
     -- background --       -- block this with walls to make it seem like the floor --
     local floor = display.newImageRect( uiGroup, "FLOORBACK.jpg", 1920, 1080 ) -- declaring continue button
