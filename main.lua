@@ -280,6 +280,8 @@ local function mageIconClicked() --when the mage is clicked start new game
 
     -- wall physics --
     local Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
+    Walls.x = 36
+    Walls.y =36
     physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
     local function addWall(coordinateX, coordinateY) --adding a function to make adding a wall easier
         Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
