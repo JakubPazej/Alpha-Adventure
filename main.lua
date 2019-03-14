@@ -7,7 +7,7 @@ local uiGroup = display.newGroup()           --UI assets
 local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 
 -- Sounds & Music --
-local backgroundMusic = audio.loadStream("fire_ass_Slovak_folk_that_makes_me_wanna_dance_rn.wma") --loads music in small chunks to save memory
+local backgroundMusic = audio.loadStream("CreepMusic.mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
 local bgVolume = 0.15
 audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to 0.3
@@ -272,9 +272,9 @@ local function mageIconClicked() --when the mage is clicked start new game
 
     -- PLAYER PHYSICS --
     local player = display.newImageRect(mainGroup,"Player.png", 72, 72) -- (72x72)pixels per box to have 400 positions on the map. 20per row.
-    player.x = display.contentCenterX
-    player.y = display.contentCenterY
-    physics.addBody( player, "dynamic",{density =0})
+    player.x = 190
+    player.y = 180
+    physics.addBody( player, "dynamic",{density =5000})
     player.isFixedRotation=true
     player.isBullet = false
     local Vx = 0
@@ -333,14 +333,24 @@ addWallsLine( 36, 36, 36+72, 1872 + 36 -72 ) --left
 addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
 -- I left out the top left which is the first instance of wall thats outside of addWall
 --well have to sort that out somehow
-
+addWallsLine(324, 324,72, 576)
     -- enemy --
     local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
-    enemy.x = display.contentCenterX+720
-    enemy.y = display.contentCenterY-300
+      enemy.isVisible = false
+  local function addEnemy (coordinateX, coordinateY,Ex,Ey)
+    enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
+    enemy.x = coordinateX
+    enemy.y = coordinateY
+    physics.addBody( enemy, "dynamic",{density =0, bounce =1})
+    enemy.isFixedRotation=true
+    player.isBullet = false
+    enemy:setLinearVelocity(Ex,Ey)
+  end
+  addEnemy(500,500, 80000000000,0)
+
 
     -- background --       -- block this with walls to make it seem like the floor --
-    local floor = display.newImageRect( uiGroup, "FLOORBACK.jpg", 1920, 1080 ) -- declaring continue button
+    local floor = display.newImageRect( uiGroup, "floor.jpg", 1920, 1080 ) -- declaring continue button
     floor.x = display.contentCenterX
     floor.y = display.contentCenterY
 
