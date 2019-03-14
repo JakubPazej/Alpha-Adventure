@@ -277,6 +277,9 @@ local function mageIconClicked() --when the mage is clicked start new game
     physics.addBody( player, "dynamic",{density =0})
     player.isFixedRotation=true
     player.isBullet = false
+    local Vx = 0
+    local Vy = 0
+    player:setLinearVelocity(Vx,Vy)
 
     -- wall physics --
     local Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
@@ -345,48 +348,64 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
     local function onKeyEvent(event)
     if event.keyName == "a" then
        if event.phase == "down" then
-         player:applyLinearImpulse(-.5,0,player.x,player.y)
+         Vx = Vx - 200
+         player:setLinearVelocity(Vx,Vy)
+         --player:applyLinearImpulse(-.5,0,player.x,player.y)
           --transition.to(player, {time = 3000, x = player.x - 1000})
         elseif event.phase == "up" then
-          player:applyLinearImpulse(0.5,0,player.x,player.y)
+          Vx = Vx + 200
+          player:setLinearVelocity(Vx,Vy)
+          --player:applyLinearImpulse(0.5,0,player.x,player.y)
           --transition.cancel()
        end
     end
     if event.keyName == "d" then
        if event.phase == "down" then
-         player:applyLinearImpulse(.5,0,player.x,player.y)
+         Vx = Vx + 200
+         player:setLinearVelocity(Vx,Vy)
+         --player:applyLinearImpulse(.5,0,player.x,player.y)
           --transition.to(player, {time = 3000, x = player.x  + 1000})
         elseif event.phase == "up" then
-          player:applyLinearImpulse(-.5,0,player.x,player.y)
+          Vx = Vx - 200
+          player:setLinearVelocity(Vx,Vy)
+          --player:applyLinearImpulse(-.5,0,player.x,player.y)
           --transition.cancel()
        end
     end
     if event.keyName == "w" then
        if event.phase == "down" then
-         player:applyLinearImpulse(0,-.5,player.x,player.y)
+         Vy = Vy-200
+         player:setLinearVelocity(Vx,Vy)
+         --player:applyLinearImpulse(0,-.5,player.x,player.y)
           --transition.to(player, {time = 3000, y = player.y  - 1000})
         elseif event.phase == "up" then
-          player:applyLinearImpulse(0,.5,player.x,player.y)
+          Vy = Vy + 200
+          player:setLinearVelocity(Vx,Vy)
+          --player:applyLinearImpulse(0,.5,player.x,player.y)
           --transition.cancel()
        end
     end
     if event.keyName == "s" then
        if event.phase == "down" then
-         player:applyLinearImpulse(0,.5,player.x,player.y)
+         Vy = Vy + 200
+         player:setLinearVelocity(Vx,Vy)
+         --player:applyLinearImpulse(0,.5,player.x,player.y)
           --transition.to(player, {time = 3000, y = player.y  + 1000})
         elseif event.phase == "up" then
-          player:applyLinearImpulse(0,-.5,player.x,player.y)
+          Vy = Vy - 200
+          player:setLinearVelocity(Vx,Vy)
+          --player:applyLinearImpulse(0,-.5,player.x,player.y)
           --transition.cancel()
        end
     end
   end
 
-    local function onLocalCollision(event)
+  --[[  local function onLocalCollision(event)
       player:setLinearVelocity(0,0)
   end
   Walls.collision = onLocalCollision
   Walls:addEventListener("collision")
-  --[[local function onLocalCollision( self, event )
+  local function onLocalCollision( self, event )
     print( event.target )        --the first object in the collision
     print( event.other )         --the second object in the collision
     print( event.selfElement )   --the element (number) of the first object which was hit in the collision
