@@ -264,7 +264,6 @@ local function mageIconClicked() --when the mage is clicked start new game
 
     -- VARIABLES --
     local livesPlayer = 1
-    local livesEnemy = 1
     local isPlayerDead = false
     local experience = 0
     local playerLevel = 0
@@ -293,12 +292,6 @@ local function mageIconClicked() --when the mage is clicked start new game
         physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
         Walls.gravityScale =0
     end
-
-  --[[  local function onLocalCollision( self, event ) --wtf is this, Jakub
-      player:setLinearVelocity(0,0)
-    end
-    "collision"
-      Walls:addEventListener( "collision" )]]
 
     local function addWallsLine(X1, X2, Y1, Y2) --function to add walls in lines.
       if X1 == X2 and Y1 ~= Y2 then             --This function should be considered art.
@@ -331,13 +324,12 @@ addWallsLine( 36, 1872 + 36, 1044, 1044) -- bottom, working now, for loops are d
 addWallsLine( 72+36, 1872 + 36, 36, 36) --top
 addWallsLine( 36, 36, 36+72, 1872 + 36 -72 ) --left
 addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
--- I left out the top left which is the first instance of wall thats outside of addWall
---well have to sort that out somehow
-addWallsLine(324, 324,72, 576)
+addWallsLine( 324, 324, 72, 576)
+
     -- enemy --
-    local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
-      enemy.isVisible = false
-  local function addEnemy (coordinateX, coordinateY,Ex,Ey)
+  local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
+    enemy.isVisible = false
+  local function addEnemy (coordinateX, coordinateY, Ex, Ey)
     enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
     enemy.x = coordinateX
     enemy.y = coordinateY
@@ -346,8 +338,19 @@ addWallsLine(324, 324,72, 576)
     player.isBullet = false
     enemy:setLinearVelocity(Ex,Ey)
   end
-  addEnemy(500,500, 80000000000,0)
 
+  addEnemy(500,500, 0, 0)
+
+  local  randomMovementEnemy = function() --endless loop for generating random number for enemy to change movements
+    local minus1 =1
+    local minus2 =1
+    if math.random() > 0.5 then minus1 = -1 end
+    if math.random() > 0.5 then minus2 = -1 end
+    local Ex = ((math.random() *200) +50) *minus1
+    local Ey = ((math.random() *200) +50) *minus2
+    enemy:setLinearVelocity(Ex,Ey)
+  end
+    timer.performWithDelay( 1000, randomMovementEnemy, -1)
 
     -- background --       -- block this with walls to make it seem like the floor --
     local floor = display.newImageRect( uiGroup, "floor.jpg", 1920, 1080 ) -- declaring continue button
