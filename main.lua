@@ -7,7 +7,7 @@ local uiGroup = display.newGroup()           --UI assets
 local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 
 -- Sounds & Music --
-local backgroundMusic = audio.loadStream("CreepMusic.mp3") --loads music in small chunks to save memory
+local backgroundMusic = audio.loadStream("OPENMUSIC.mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
 local bgVolume = 0.15
 audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to 0.3
