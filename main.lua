@@ -418,9 +418,10 @@ addWallsLine( 324, 324, 72, 576)
       physics.addBody(fireball, "dynamic")
       fireball.gravityScale = 0
       fireball.isBullet = true
-      fireball.x = player.x
-      fireball.y = player.y
-      transition.to(fireball,{time=5000 , x = event.x, y =event.y})
+      fireball.x = player.x +36
+      fireball.y = player.y +36
+      fireball:setLinearVelocity(event.x - player.x, event.y - player.y)
+    --  transition.to(fireball,{time=5000 , x = event.x, y =event.y})
     --[[  local deltaX = event.x - player.x
       local deltaY = event.y - player.y
       normDeltaX = deltaX / math.sqrt(math.pow(deltaX,2) + math.pow(deltaY,2))
