@@ -7,10 +7,10 @@ local uiGroup = display.newGroup()           --UI assets
 local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 
 -- Sounds & Music --
-local backgroundMusic = audio.loadStream("OPENMUSIC.mp3") --loads music in small chunks to save memory
+--[[local backgroundMusic = audio.loadStream("OPENMUSIC.mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
 local bgVolume = 0.15
-audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to 0.3
+audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to 0.3]]
 
 -- UI BACKGROUND --
 local background = display.newImageRect( backGroup, "ui_background.png", 1920, 1080 ) --declaring background image
@@ -413,6 +413,23 @@ addWallsLine( 324, 324, 72, 576)
     end
   end
 
+  local function shoot(event)
+      local fireball = display.newImageRect(mainGroup,"Fireball.png", 72 , 72)
+      physics.addBody(fireball, "dynamic")
+      fireball.gravityScale = 0
+      fireball.isBullet = true
+      fireball.x = player.x
+      fireball.y = player.y
+      transition.to(fireball,{time=5000 , x = event.x, y =event.y})
+    --[[  local deltaX = event.x - player.x
+      local deltaY = event.y - player.y
+      normDeltaX = deltaX / math.sqrt(math.pow(deltaX,2) + math.pow(deltaY,2))
+      normDeltaY = deltaY / math.sqrt(math.pow(deltaX,2) + math.pow(deltaY,2))
+      fireball:setLinearVelocity( normDeltaX  * 5, normDeltaY  * 5 )
+      fireball.x = player.x
+      fireball.y = player.y]]
+  end
+
   --[[  local function onLocalCollision(event)
       player:setLinearVelocity(0,0)
   end
@@ -430,6 +447,8 @@ Walls:addEventListener( "collision" )]]
 --addWall(100, 100)
 
     Runtime:addEventListener("key", onKeyEvent)
+    Runtime:addEventListener("tap", shoot)
+
 
 end --end for mageIconClicked
 mageIcon:addEventListener( "tap", mageIconClicked )
