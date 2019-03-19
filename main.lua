@@ -7,10 +7,10 @@ local uiGroup = display.newGroup()           --UI assets
 local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 
 -- Sounds & Music --
---[[local backgroundMusic = audio.loadStream("OPENMUSIC.mp3") --loads music in small chunks to save memory
+local backgroundMusic = audio.loadStream("OPENMUSIC.mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
 local bgVolume = 0.15
-audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to 0.3]]
+audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to 0.3
 
 -- UI BACKGROUND --
 local background = display.newImageRect( backGroup, "ui_background.png", 1920, 1080 ) --declaring background image
@@ -322,9 +322,13 @@ local function mageIconClicked() --when the mage is clicked start new game
       end
 addWallsLine( 36, 1872 + 36, 1044, 1044) -- bottom, working now, for loops are different than in java, notice the middle part
 addWallsLine( 72+36, 1872 + 36, 36, 36) --top
-addWallsLine( 36, 36, 36+72, 1872 + 36 -72 ) --left
+addWallsLine( 36, 36, 36+72, 504 + 36 -72 ) --left up
+local breakableWall = display.newImageRect( mainGroup,"breakableWall.png", 72, 72)
+breakableWall.x = 36
+breakableWall.y =542.5
+physics.addBody( breakableWall, "static", {bounce = 0.0, friction = 50, density = 150} )
+addWallsLine( 36, 36, 616, 976 ) --left down
 addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
-addWallsLine( 324, 324, 72, 576)
 
     -- enemy --
   local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
@@ -449,6 +453,10 @@ Walls:addEventListener( "collision" )]]
 
     Runtime:addEventListener("key", onKeyEvent)
     Runtime:addEventListener("tap", shoot)
+
+-- Breakable wall break --
+
+
 
 
 end --end for mageIconClicked
