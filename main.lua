@@ -424,8 +424,6 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
   function ProteinProjectile(event)
     local Math1
     local Ratio1
-    local RadiusX
-    local RadiusY
     local Protein = display.newImageRect(mainGroup,"Protein.png", 70, 70)
     Protein.isVisible = true
     Protein.isBullet = true
