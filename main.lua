@@ -417,14 +417,38 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
     end
   end
 
-  local function shoot(event)
+  function ProteinProjectile(event)
+    local Math1
+    local Ratio1
+    local RadiusX
+    local RadiusY
+    local Protein = display.newImageRect(mainGroup,"Protein.png", 70, 70)
+    Protein.isVisible = true
+    Protein.isBullet = true
+    Protein.x = player.x
+    Protein.y = player.y
+    Protein.isSensor = true
+    Protein.isFixedRotation = false
+    physics.addBody(Protein, "dynamic")
+    Math1 = math.sqrt((event.x - player.x)^2 + (event.y - player.y)^2 )
+    Ratio1 = Math1/500
+    RadiusX = (event.x-player.x)/Ratio1
+    RadiusY = (event.y-player.y)/Ratio1
+    if event.y > player.y then
+      Protein.y = player.y + 36
+    else
+     Protein:setLinearVelocity(RadiusX, RadiusY)
+  end
+end
+
+  --[[local function shoot(event)
       local fireball = display.newImageRect(mainGroup,"Fireball.png", 72 , 72)
       physics.addBody(fireball, "dynamic")
       fireball.gravityScale = 0
       fireball.isBullet = true
       fireball.x = player.x +36
       fireball.y = player.y +36
-      fireball:setLinearVelocity(event.x - player.x, event.y - player.y)
+      fireball:setLinearVelocity(event.x - player.x, event.y - player.y)]]
     --  transition.to(fireball,{time=5000 , x = event.x, y =event.y})
     --[[  local deltaX = event.x - player.x
       local deltaY = event.y - player.y
@@ -433,7 +457,7 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
       fireball:setLinearVelocity( normDeltaX  * 5, normDeltaY  * 5 )
       fireball.x = player.x
       fireball.y = player.y]]
-  end
+  --end
 
   --[[  local function onLocalCollision(event)
       player:setLinearVelocity(0,0)
