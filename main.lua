@@ -362,7 +362,7 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
     floor.y = display.contentCenterY
 
     -- movement wasd --
-    local function onKeyEvent(event)
+    local function onKeyEvent(event)   -- movement commands --  sets Vx and Vy independently, allowing fluid movement
     if event.keyName == "a" then
        if event.phase == "down" then
          Vx = Vx - 200
@@ -429,50 +429,16 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
     Protein.isBullet = true
     Protein.x = player.x
     Protein.y = player.y
+    physics.addBody(Protein, "dynamic")
     Protein.isSensor = true
     Protein.isFixedRotation = false
-    physics.addBody(Protein, "dynamic")
     Math1 = math.sqrt(math.pow((event.x - player.x),2) + math.pow((event.y - player.y),2 ))
     Ratio1 = Math1/500
       local eX = scaleUpPoint(player.x, event.x, 1.01, 1)
       local eY = scaleUpPoint(player.y, event.y, 1.01, 1)
-     transition.to(Protein, {x=eX,y=eY,time=Math1/0.01})
+      transition.to(Protein, {x=eX,y=eY,time=Math1/0.01})
   end
 
-
-  --[[local function shoot(event)
-      local fireball = display.newImageRect(mainGroup,"Fireball.png", 72 , 72)
-      physics.addBody(fireball, "dynamic")
-      fireball.gravityScale = 0
-      fireball.isBullet = true
-      fireball.x = player.x +36
-      fireball.y = player.y +36
-      fireball:setLinearVelocity(event.x - player.x, event.y - player.y)]]
-    --  transition.to(fireball,{time=5000 , x = event.x, y =event.y})
-    --[[  local deltaX = event.x - player.x
-      local deltaY = event.y - player.y
-      normDeltaX = deltaX / math.sqrt(math.pow(deltaX,2) + math.pow(deltaY,2))
-      normDeltaY = deltaY / math.sqrt(math.pow(deltaX,2) + math.pow(deltaY,2))
-      fireball:setLinearVelocity( normDeltaX  * 5, normDeltaY  * 5 )
-      fireball.x = player.x
-      fireball.y = player.y]]
-  --end
-
-  --[[  local function onLocalCollision(event)
-      player:setLinearVelocity(0,0)
-  end
-  Walls.collision = onLocalCollision
-  Walls:addEventListener("collision")
-  local function onLocalCollision( self, event )
-    print( event.target )        --the first object in the collision
-    print( event.other )         --the second object in the collision
-    print( event.selfElement )   --the element (number) of the first object which was hit in the collision
-    print( event.otherElement )  --the element (number) of the second object which was hit in the collision
-end
-Walls.collision = onLocalCollision
-Walls:addEventListener( "collision" )]]
-
---addWall(100, 100)
 
     Runtime:addEventListener("key", onKeyEvent)
     Runtime:addEventListener("tap", ProteinProjectile)
