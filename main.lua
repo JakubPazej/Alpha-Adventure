@@ -417,6 +417,10 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
     end
   end
 
+  local function scaleUpPoint( x1, x2, m, n)
+    return (((m*x2)-(n*x1))/(m-n))
+  end
+
   function ProteinProjectile(event)
     local Math1
     local Ratio1
@@ -430,16 +434,13 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
     Protein.isSensor = true
     Protein.isFixedRotation = false
     physics.addBody(Protein, "dynamic")
-    Math1 = math.sqrt((event.x - player.x)^2 + (event.y - player.y)^2 )
+    Math1 = math.sqrt(math.pow((event.x - player.x),2) + math.pow((event.y - player.y),2 ))
     Ratio1 = Math1/500
-    RadiusX = (event.x-player.x)/Ratio1
-    RadiusY = (event.y-player.y)/Ratio1
-    if event.y > player.y then
-      Protein.y = player.y + 36
-    else
-     Protein:setLinearVelocity(RadiusX, RadiusY)
+      local eX = scaleUpPoint(player.x, event.x, 1.01, 1)
+      local eY = scaleUpPoint(player.y, event.y, 1.01, 1)
+     transition.to(Protein, {x=eX,y=eY,time=Math1/0.01})
   end
-end
+
 
   --[[local function shoot(event)
       local fireball = display.newImageRect(mainGroup,"Fireball.png", 72 , 72)
@@ -476,7 +477,7 @@ Walls:addEventListener( "collision" )]]
 --addWall(100, 100)
 
     Runtime:addEventListener("key", onKeyEvent)
-    Runtime:addEventListener("tap", shoot)
+    Runtime:addEventListener("tap", ProteinProjectile)
 
 -- Breakable wall break --
 
