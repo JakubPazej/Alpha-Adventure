@@ -7,10 +7,12 @@ local uiGroup = display.newGroup()           --UI assets
 local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 
 -- Sounds & Music --
-local backgroundMusic = audio.loadStream("OPENMUSIC.mp3") --loads music in small chunks to save memory
+local backgroundMusic = audio.loadStream("28_爱给网_aigei_com .mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
 local bgVolume = 0.15
-audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to 0.3
+audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to bgVolume
+
+local buttonSound = audio.loadSound("buttonSound.mp3")
 
 -- UI BACKGROUND --
 local background = display.newImageRect( backGroup, "ui_background.png", 1920, 1080 ) --declaring background image
@@ -107,6 +109,8 @@ local function menuClicked() --When menu is clicked
     menuButtonLight.isVisible = false
     exitButton.isVisible = false
     soundText.isVisible = true
+    local soundChannel = audio.play(buttonSound, {channel = 2})
+    audio.setMaxVolume(bgVolume, {channel=2})
 
     local soundOnBox = display.newImageRect(uiGroup, "soundOn.png", 115, 112) --declaring the soundboxes
         soundOnBox.x = display.contentCenterX - 750
@@ -177,7 +181,6 @@ local function menuClicked() --When menu is clicked
         soundOnBox:removeSelf()
         soundOffBox:removeSelf()
         slider:removeSelf()
-
     end
     backButtonMenu:addEventListener("tap", backToStart) --points to the function above
 end
@@ -206,6 +209,8 @@ local function newButton_tap() --goes to new game options
     exitButton.isVisible = false
     chooseClass.isVisible = true
     mageIcon.isVisible = true
+    local soundChannel = audio.play(buttonSound, {channel = 2})
+    audio.setMaxVolume(bgVolume, {channel=2})
 
     local backButtonNew = display.newImageRect( uiGroup, "backbutton.png", 71, 101) --declaring second back button
         backButtonNew.x = 71
@@ -255,6 +260,9 @@ local function mageIconClicked() --when the mage is clicked start new game
     mageIcon.isVisible = false
     chooseClass.isVisible = false
     background.isVisible = false
+
+-- Collision Filters--
+local blueCollision = { groupIndex = 1 }
 
     -- GAME PHYSICS --
     local physics = require("physics")
@@ -326,7 +334,7 @@ addWallsLine( 36, 36, 36+72, 504 + 36 -72 ) --left up
 local breakableWall = display.newImageRect( mainGroup,"breakableWall.png", 72, 72)
 breakableWall.x = 36
 breakableWall.y =542.5
-physics.addBody( breakableWall, "static", {bounce = 0.0, friction = 50, density = 150} )
+physics.addBody( breakableWall, "static", {bounce = 0.0, friction = 50, density = 150, filter = blueCollision} )
 addWallsLine( 36, 36, 616, 976 ) --left down
 addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
 
@@ -429,7 +437,7 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
     Protein.isBullet = true
     Protein.x = player.x
     Protein.y = player.y
-    physics.addBody(Protein, "dynamic")
+    physics.addBody(Protein, "dynamic", {filter=blueCollision})
     Protein.isSensor = true
     Protein.isFixedRotation = false
     Math1 = math.sqrt(math.pow((event.x - player.x),2) + math.pow((event.y - player.y),2 ))
@@ -443,8 +451,13 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
     Runtime:addEventListener("key", onKeyEvent)
     Runtime:addEventListener("tap", ProteinProjectile)
 
--- Breakable wall break --
-
+ --Breakable wall break --
+local function wallBreak()
+  --Protein.removeSelf()
+  breakableWall:removeSelf()
+end
+breakableWall.collision = wallBreak
+breakableWall:addEventListener("collision")
 
 
 
