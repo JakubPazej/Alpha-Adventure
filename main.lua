@@ -353,6 +353,17 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
   addHeart(200,1045)
 function getHit(event)
 end
+  local function addMana(X, Y) --adding a function to make adding a wall easier
+    fullMana = display.newImageRect(mainGroup,"Mana.png",72,72, X, Y)
+    fullMana.x = X
+    fullMana.y = Y
+  end
+  local playerLives = 3
+  addMana(400,1045)
+  addMana(450,1045)
+  addMana(500,1045)
+
+
 
     -- enemy --
   local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
