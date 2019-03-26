@@ -271,11 +271,11 @@ local blueCollision = { groupIndex = 1 }
 
 
     -- VARIABLES --
-    local livesPlayer = 1
     local isPlayerDead = false
     local experience = 0
     local playerLevel = 0
     local mapLevel = 0
+
 
     -- PLAYER PHYSICS --
     local player = display.newImageRect(mainGroup,"Player.png", 72, 72) -- (72x72)pixels per box to have 400 positions on the map. 20per row.
@@ -300,6 +300,9 @@ local blueCollision = { groupIndex = 1 }
         physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
         Walls.gravityScale =0
     end
+
+
+
 
     local function addWallsLine(X1, X2, Y1, Y2) --function to add walls in lines.
       if X1 == X2 and Y1 ~= Y2 then             --This function should be considered art.
@@ -337,6 +340,19 @@ breakableWall.y =542.5
 physics.addBody( breakableWall, "static", {bounce = 0.0, friction = 50, density = 150, filter = blueCollision} )
 addWallsLine( 36, 36, 616, 976 ) --left down
 addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
+
+  -- UI --               -- Health Bar , Armor, Mana , Items
+  local function addHeart(X, Y) --adding a function to make adding a wall easier
+    fullHeart = display.newImageRect(mainGroup,"Heart.png",72,72, X, Y)
+    fullHeart.x = X
+    fullHeart.y = Y
+  end
+  local playerLives = 3
+  addHeart(100,1045)
+  addHeart(150,1045)
+  addHeart(200,1045)
+function getHit(event)
+end
 
     -- enemy --
   local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
@@ -409,6 +425,9 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
           --player:applyLinearImpulse(0,.5,player.x,player.y)
           --transition.cancel()
        end
+    end
+    if event.keyName =="e" then
+      getHit()
     end
     if event.keyName == "s" then
        if event.phase == "down" then
