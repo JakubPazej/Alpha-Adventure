@@ -271,11 +271,11 @@ local blueCollision = { groupIndex = 1 }
 
 
     -- VARIABLES --
+    local livesPlayer = 1
     local isPlayerDead = false
     local experience = 0
     local playerLevel = 0
     local mapLevel = 0
-
 
     -- PLAYER PHYSICS --
     local player = display.newImageRect(mainGroup,"Player.png", 72, 72) -- (72x72)pixels per box to have 400 positions on the map. 20per row.
@@ -300,9 +300,6 @@ local blueCollision = { groupIndex = 1 }
         physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
         Walls.gravityScale =0
     end
-
-
-
 
     local function addWallsLine(X1, X2, Y1, Y2) --function to add walls in lines.
       if X1 == X2 and Y1 ~= Y2 then             --This function should be considered art.
@@ -380,6 +377,50 @@ end
 
   addEnemy(500,500, 0, 0)
 
+  local function scaleUpPoint( x1, x2, m, n)
+    return (((m*x2)-(n*x1))/(m-n))
+  end
+
+--Enemy attack function.
+  function EnemyAttack(event)
+    local ShittyNutrients = display.newImageRect(mainGroup,"Protein.png", 40, 40)
+    local Math2
+    ShittyNutrients.isVisible = true
+    ShittyNutrients.isBullet = true
+    ShittyNutrients.x = enemy.x
+    ShittyNutrients.y = enemy.y
+    physics.addBody(ShittyNutrients, "dynamic", {filter=blueCollision})
+    ShittyNutrients.isSensor = true
+    ShittyNutrients.isFixedRotation = false
+    Math2 = math.sqrt(math.pow((player.x - enemy.x),2) + math.pow((player.y - enemy.y),2 ))
+      local EX = scaleUpPoint(enemy.x, player.x, 1.01, 1)
+      local EY = scaleUpPoint(enemy.y, player.y, 1.01, 1)
+      transition.to(ShittyNutrients, {x=EX,y=EY,time=Math2/0.002})
+    end
+
+--If the player gets too close the enemy will fire projectiles at them.
+--The close the player is to an enemy the higher the rate of fire.
+  function EnemyDetectRange(event)
+    if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 2500 then
+      for i=0, 10, i+1 do
+      timer.performWithDelay(1000, EnemyAttack)
+      if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 2500 then break end
+    end
+    if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 1250 then
+      for i=0, 10, i+1 do
+        timer.performWithDelay(500, EnemyAttack)
+        if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 1250 then break end
+      end
+    if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 625 then
+      for i=0, 10, i+1 do
+        timer.performWithDelay(200, EnemyAttack)
+        if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 625 then break end
+        end
+      end
+    end
+  end
+end
+
   local  randomMovementEnemy = function() --endless loop for generating random number for enemy to change movements
     local minus1 =1
     local minus2 =1
@@ -437,9 +478,6 @@ end
           --transition.cancel()
        end
     end
-    if event.keyName =="e" then
-      getHit()
-    end
     if event.keyName == "s" then
        if event.phase == "down" then
          Vy = Vy + 200
@@ -455,13 +493,8 @@ end
     end
   end
 
-  local function scaleUpPoint( x1, x2, m, n)
-    return (((m*x2)-(n*x1))/(m-n))
-  end
-
   function ProteinProjectile(event)
     local Math1
-    local Ratio1
     local Protein = display.newImageRect(mainGroup,"Protein.png", 70, 70)
     Protein.isVisible = true
     Protein.isBullet = true
@@ -471,13 +504,13 @@ end
     Protein.isSensor = true
     Protein.isFixedRotation = false
     Math1 = math.sqrt(math.pow((event.x - player.x),2) + math.pow((event.y - player.y),2 ))
-    Ratio1 = Math1/500
+
       local eX = scaleUpPoint(player.x, event.x, 1.01, 1)
       local eY = scaleUpPoint(player.y, event.y, 1.01, 1)
       transition.to(Protein, {x=eX,y=eY,time=Math1/0.01})
   end
 
-
+    Runtime:addEventListener("preCollision", EnemyDetectRange)
     Runtime:addEventListener("key", onKeyEvent)
     Runtime:addEventListener("tap", ProteinProjectile)
 
