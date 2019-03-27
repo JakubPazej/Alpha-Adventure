@@ -264,6 +264,29 @@ local function mageIconClicked() --when the mage is clicked start new game
 -- Collision Filters--
 local blueCollision = { groupIndex = 1 }
 
+-- Image Sheets and Sequences --
+local mageSheetOptions=
+{
+  -- Required parameters
+    width = 512,
+    height = 256,
+    numFrames = 8,
+}
+local mageSheet = graphics.newImageSheet("mageSpriteSheet.png", mageSheetOptions)
+
+local sequences_runningMage = {
+    -- consecutive frames sequence
+    {
+        name = "normalRun",
+        start = 1,
+        count = 8,
+        time = 400,
+        loopCount = 0,
+        loopDirection = "forward"
+    }
+}
+--local mageRun = display.newSprite(mainGroup, mageSheet, sequences_runningMage)
+
     -- GAME PHYSICS --
     local physics = require("physics")
         physics.start()
@@ -278,7 +301,7 @@ local blueCollision = { groupIndex = 1 }
     local mapLevel = 0
 
     -- PLAYER PHYSICS --
-    local player = display.newImageRect(mainGroup,"Player.png", 72, 72) -- (72x72)pixels per box to have 400 positions on the map. 20per row.
+    local player = display.newSprite( mageSheet, sequences_runningMage) -- (72x72)pixels per box to have 400 positions on the map. 20per row.
     player.x = 190
     player.y = 180
     physics.addBody( player, "dynamic",{density =5000})
@@ -338,7 +361,7 @@ physics.addBody( breakableWall, "static", {bounce = 0.0, friction = 50, density 
 addWallsLine( 36, 36, 616, 976 ) --left down
 addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
 
-  -- UI --               -- Health Bar , Armor, Mana , Items
+--[[  -- UI --               -- Health Bar , Armor, Mana , Items
   local function addHeart(X, Y) --adding a function to make adding a wall easier
     fullHeart = display.newImageRect(mainGroup,"Heart.png",72,72, X, Y)
     fullHeart.x = X
@@ -359,8 +382,6 @@ end
   addMana(400,1045)
   addMana(450,1045)
   addMana(500,1045)
-
-
 
     -- enemy --
   local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
@@ -431,23 +452,34 @@ end
     enemy:setLinearVelocity(Ex,Ey)
   end
     timer.performWithDelay( 1000, randomMovementEnemy, -1)
-
+]]--
     -- background --       -- block this with walls to make it seem like the floor --
     local floor = display.newImageRect( uiGroup, "floor.jpg", 1920, 1080 ) -- declaring continue button
     floor.x = display.contentCenterX
     floor.y = display.contentCenterY
 
     -- movement wasd --
+    local previousLeft = 2
+    local previousRight = 2
+
     local function onKeyEvent(event)   -- movement commands --  sets Vx and Vy independently, allowing fluid movement
     if event.keyName == "a" then
        if event.phase == "down" then
          Vx = Vx - 200
          player:setLinearVelocity(Vx,Vy)
+         player:play()
+         previousLeft = 1
+         if previousRight == 1 or previousRight == 2 then
+           player:scale(-1, 1)
+           previousRight = 0
+         end
          --player:applyLinearImpulse(-.5,0,player.x,player.y)
           --transition.to(player, {time = 3000, x = player.x - 1000})
         elseif event.phase == "up" then
           Vx = Vx + 200
           player:setLinearVelocity(Vx,Vy)
+          player:pause()
+          player:setFrame(1)
           --player:applyLinearImpulse(0.5,0,player.x,player.y)
           --transition.cancel()
        end
@@ -456,11 +488,19 @@ end
        if event.phase == "down" then
          Vx = Vx + 200
          player:setLinearVelocity(Vx,Vy)
+         player:play()
+         previousRight = 1
+         if previousLeft == 1 then
+           player:scale(-1, 1)
+           previousLeft = 0
+         end
          --player:applyLinearImpulse(.5,0,player.x,player.y)
           --transition.to(player, {time = 3000, x = player.x  + 1000})
         elseif event.phase == "up" then
           Vx = Vx - 200
           player:setLinearVelocity(Vx,Vy)
+          player:pause()
+          player:setFrame(1)
           --player:applyLinearImpulse(-.5,0,player.x,player.y)
           --transition.cancel()
        end
@@ -469,11 +509,14 @@ end
        if event.phase == "down" then
          Vy = Vy-200
          player:setLinearVelocity(Vx,Vy)
+         player:play()
          --player:applyLinearImpulse(0,-.5,player.x,player.y)
           --transition.to(player, {time = 3000, y = player.y  - 1000})
         elseif event.phase == "up" then
           Vy = Vy + 200
           player:setLinearVelocity(Vx,Vy)
+          player:pause()
+          player:setFrame(1)
           --player:applyLinearImpulse(0,.5,player.x,player.y)
           --transition.cancel()
        end
@@ -482,18 +525,21 @@ end
        if event.phase == "down" then
          Vy = Vy + 200
          player:setLinearVelocity(Vx,Vy)
+         player:play()
          --player:applyLinearImpulse(0,.5,player.x,player.y)
           --transition.to(player, {time = 3000, y = player.y  + 1000})
         elseif event.phase == "up" then
           Vy = Vy - 200
           player:setLinearVelocity(Vx,Vy)
+          player:pause()
+          player:setFrame(1)
           --player:applyLinearImpulse(0,-.5,player.x,player.y)
           --transition.cancel()
        end
     end
   end
 
-  function ProteinProjectile(event)
+--[[  function ProteinProjectile(event)
     local Math1
     local Protein = display.newImageRect(mainGroup,"Protein.png", 70, 70)
     Protein.isVisible = true
@@ -509,10 +555,10 @@ end
       local eY = scaleUpPoint(player.y, event.y, 1.01, 1)
       transition.to(Protein, {x=eX,y=eY,time=Math1/0.01})
   end
-
-    Runtime:addEventListener("preCollision", EnemyDetectRange)
+]]--
+--    Runtime:addEventListener("preCollision", EnemyDetectRange)
     Runtime:addEventListener("key", onKeyEvent)
-    Runtime:addEventListener("tap", ProteinProjectile)
+--    Runtime:addEventListener("tap", ProteinProjectile)
 
  --Breakable wall break --
 local function wallBreak()
