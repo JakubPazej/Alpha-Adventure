@@ -361,7 +361,7 @@ physics.addBody( breakableWall, "static", {bounce = 0.0, friction = 50, density 
 addWallsLine( 36, 36, 616, 976 ) --left down
 addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
 
---[[  -- UI --               -- Health Bar , Armor, Mana , Items
+  -- UI --               -- Health Bar , Armor, Mana , Items
   local function addHeart(X, Y) --adding a function to make adding a wall easier
     fullHeart = display.newImageRect(mainGroup,"Heart.png",72,72, X, Y)
     fullHeart.x = X
@@ -430,8 +430,7 @@ end
     if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 1250 then
       for i=0, 10, i+1 do
         timer.performWithDelay(420, EnemyAttack)
-        if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 1250 then break end
-        end
+        if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 1250 then break end      
       end
     end
   end
@@ -447,7 +446,7 @@ end
     enemy:setLinearVelocity(Ex,Ey)
   end
     timer.performWithDelay( 1000, randomMovementEnemy, -1)
-]]--
+
     -- background --       -- block this with walls to make it seem like the floor --
     local floor = display.newImageRect( uiGroup, "floor.jpg", 1920, 1080 ) -- declaring continue button
     floor.x = display.contentCenterX
@@ -534,7 +533,7 @@ end
     end
   end
 
---[[  function ProteinProjectile(event)
+  function ProteinProjectile(event)
     local Math1
     local Protein = display.newImageRect(mainGroup,"Protein.png", 70, 70)
     Protein.isVisible = true
@@ -550,7 +549,7 @@ end
       local eY = scaleUpPoint(player.y, event.y, 1.01, 1)
       transition.to(Protein, {x=eX,y=eY,time=Math1/0.01})
   end
-]]--
+
 --    Runtime:addEventListener("preCollision", EnemyDetectRange)
     Runtime:addEventListener("key", onKeyEvent)
 --    Runtime:addEventListener("tap", ProteinProjectile)
