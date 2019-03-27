@@ -424,18 +424,14 @@ end
   function EnemyDetectRange(event)
     if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 2500 then
       for i=0, 10, i+1 do
-      timer.performWithDelay(1000, EnemyAttack)
+      timer.performWithDelay(500, EnemyAttack)
       if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 2500 then break end
     end
     if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 1250 then
       for i=0, 10, i+1 do
-        timer.performWithDelay(500, EnemyAttack)
+        timer.performWithDelay(420, EnemyAttack)
         if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 1250 then break end
       end
-    if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 625 then
-      for i=0, 10, i+1 do
-        timer.performWithDelay(200, EnemyAttack)
-        if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 625 then break end
         end
       end
     end
