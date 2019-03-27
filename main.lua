@@ -431,7 +431,6 @@ end
       for i=0, 10, i+1 do
         timer.performWithDelay(420, EnemyAttack)
         if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 1250 then break end
-      end
         end
       end
     end
