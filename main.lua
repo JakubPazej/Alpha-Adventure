@@ -430,7 +430,7 @@ end
     if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 1250 then
       for i=0, 10, i+1 do
         timer.performWithDelay(420, EnemyAttack)
-        if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 1250 then break end      
+        if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 1250 then break end
       end
     end
   end
@@ -550,9 +550,9 @@ end
       transition.to(Protein, {x=eX,y=eY,time=Math1/0.01})
   end
 
---    Runtime:addEventListener("preCollision", EnemyDetectRange)
+    Runtime:addEventListener("preCollision", EnemyDetectRange)
     Runtime:addEventListener("key", onKeyEvent)
---    Runtime:addEventListener("tap", ProteinProjectile)
+    Runtime:addEventListener("tap", ProteinProjectile)
 
  --Breakable wall break --
 local function wallBreak()
