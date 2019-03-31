@@ -307,6 +307,7 @@ local mageSheet = graphics.newImageSheet("mageSpriteSheet.png", mageSheetOptions
     physics.addBody( player, "dynamic",{density =5000})
     player.isFixedRotation=true
     player.isBullet = false
+    player.type = "player"
     local Vx = 0
     local Vy = 0
     player:setLinearVelocity(Vx,Vy)
@@ -409,6 +410,7 @@ end
     local Math2
     ShittyNutrients.isVisible = true
     ShittyNutrients.isBullet = true
+    ShittyNutrients.type = "ShittyNutrients"
     ShittyNutrients.x = enemy.x
     ShittyNutrients.y = enemy.y
     physics.addBody(ShittyNutrients, "dynamic", {filter=blueCollision})
@@ -571,10 +573,18 @@ local function onLocalCollision( self, event )   -- Protein Projectile detection
     local oof = audio.play(enemyHit)
   end
   end
+  if(event.target.type=="player" and event.other.type=="ShittyNutrients") then
+    if event.phase == "began" then
+    local oof = audio.play(enemyHit)
+  end
+  end
 end
 
 enemy.collision = onLocalCollision
 enemy:addEventListener( "collision" ) --Checks if enemy has been hit by anything.
+
+player.collision = onLocalCollision
+player:addEventListener("collision")
 
 
 
