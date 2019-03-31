@@ -274,7 +274,7 @@ local mageSheetOptions=
 }
 local mageSheet = graphics.newImageSheet("mageSpriteSheet.png", mageSheetOptions)
 
-local sequences_runningMage = {
+--[[local sequences_runningMage = {
     -- consecutive frames sequence
     {
         name = "normalRun",
@@ -284,7 +284,7 @@ local sequences_runningMage = {
         loopCount = 0,
         loopDirection = "forward"
     }
-}
+}]]
 --local mageRun = display.newSprite(mainGroup, mageSheet, sequences_runningMage)
 
     -- GAME PHYSICS --
@@ -301,7 +301,7 @@ local sequences_runningMage = {
     local mapLevel = 0
 
     -- PLAYER PHYSICS --
-    local player = display.newSprite( mageSheet, sequences_runningMage) -- (72x72)pixels per box to have 400 positions on the map. 20per row.
+    local player = display.newImageRect( mainGroup, "player.png",72,72) -- (72x72)pixels per box to have 400 positions on the map. 20per row.
     player.x = 190
     player.y = 180
     physics.addBody( player, "dynamic",{density =5000})
@@ -391,6 +391,7 @@ end
     enemy.x = coordinateX
     enemy.y = coordinateY
     physics.addBody( enemy, "dynamic",{density =0, bounce =1})
+    enemy.type = "enemy"
     enemy.isFixedRotation=true
     player.isBullet = false
     enemy:setLinearVelocity(Ex,Ey)
@@ -461,19 +462,19 @@ end
        if event.phase == "down" then
          Vx = Vx - 200
          player:setLinearVelocity(Vx,Vy)
-         player:play()
-         previousLeft = 1
-         if previousRight == 1 or previousRight == 2 then
-           player:scale(-1, 1)
-           previousRight = 0
-         end
+        -- player:play()
+         --previousLeft = 1
+        -- if previousRight == 1 or previousRight == 2 then
+           --player:scale(-1, 1)
+           --previousRight = 0
+         --end
          --player:applyLinearImpulse(-.5,0,player.x,player.y)
           --transition.to(player, {time = 3000, x = player.x - 1000})
         elseif event.phase == "up" then
           Vx = Vx + 200
           player:setLinearVelocity(Vx,Vy)
-          player:pause()
-          player:setFrame(1)
+          --player:pause()
+          --player:setFrame(1)
           --player:applyLinearImpulse(0.5,0,player.x,player.y)
           --transition.cancel()
        end
@@ -482,19 +483,19 @@ end
        if event.phase == "down" then
          Vx = Vx + 200
          player:setLinearVelocity(Vx,Vy)
-         player:play()
-         previousRight = 1
-         if previousLeft == 1 then
-           player:scale(-1, 1)
-           previousLeft = 0
-         end
+         --player:play()
+         --previousRight = 1
+         --if previousLeft == 1 then
+           --player:scale(-1, 1)
+           --previousLeft = 0
+         --end
          --player:applyLinearImpulse(.5,0,player.x,player.y)
           --transition.to(player, {time = 3000, x = player.x  + 1000})
         elseif event.phase == "up" then
           Vx = Vx - 200
           player:setLinearVelocity(Vx,Vy)
-          player:pause()
-          player:setFrame(1)
+          --player:pause()
+          --player:setFrame(1)
           --player:applyLinearImpulse(-.5,0,player.x,player.y)
           --transition.cancel()
        end
@@ -503,14 +504,14 @@ end
        if event.phase == "down" then
          Vy = Vy-200
          player:setLinearVelocity(Vx,Vy)
-         player:play()
+         --player:play()
          --player:applyLinearImpulse(0,-.5,player.x,player.y)
           --transition.to(player, {time = 3000, y = player.y  - 1000})
         elseif event.phase == "up" then
           Vy = Vy + 200
           player:setLinearVelocity(Vx,Vy)
-          player:pause()
-          player:setFrame(1)
+          --player:pause()
+          --player:setFrame(1)
           --player:applyLinearImpulse(0,.5,player.x,player.y)
           --transition.cancel()
        end
@@ -519,14 +520,14 @@ end
        if event.phase == "down" then
          Vy = Vy + 200
          player:setLinearVelocity(Vx,Vy)
-         player:play()
+         --player:play()
          --player:applyLinearImpulse(0,.5,player.x,player.y)
           --transition.to(player, {time = 3000, y = player.y  + 1000})
         elseif event.phase == "up" then
           Vy = Vy - 200
           player:setLinearVelocity(Vx,Vy)
-          player:pause()
-          player:setFrame(1)
+          --player:pause()
+          --player:setFrame(1)
           --player:applyLinearImpulse(0,-.5,player.x,player.y)
           --transition.cancel()
        end
@@ -538,6 +539,7 @@ end
     local Protein = display.newImageRect(mainGroup,"Protein.png", 70, 70)
     Protein.isVisible = true
     Protein.isBullet = true
+    Protein.type = "protein"
     Protein.x = player.x
     Protein.y = player.y
     physics.addBody(Protein, "dynamic", {filter=blueCollision})
@@ -561,6 +563,20 @@ local function wallBreak()
 end
 breakableWall.collision = wallBreak
 breakableWall:addEventListener("collision")
+
+local function onLocalCollision( self, event )   -- Protein Projectile detection function
+  local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
+  if(event.target.type=="enemy" and event.other.type=="protein") then       --Makes sure its protein which is hitting it.
+    if event.phase == "began" then
+    local oof = audio.play(enemyHit)
+  end
+  end
+end
+
+enemy.collision = onLocalCollision
+enemy:addEventListener( "collision" ) --Checks if enemy has been hit by anything.
+
+
 
 
 
