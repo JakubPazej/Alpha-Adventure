@@ -268,30 +268,77 @@ local blueCollision = { groupIndex = 1 }
 local mageSheetOptions=
 {
   -- Required parameters
-    width = 512,
-    height = 256,
-    numFrames = 8,
+    width = 72,
+    height = 72,
+    numFrames = 25,
 }
 local mageSheet = graphics.newImageSheet("mageSpriteSheet.png", mageSheetOptions)
 
---[[local sequences_runningMage = {
+local sequences_runningMage = {
     -- consecutive frames sequence
     {
-        name = "normalRun",
+        name = "everything",
         start = 1,
-        count = 8,
+        count = 25,
         time = 400,
         loopCount = 0,
         loopDirection = "forward"
+    },
+    {
+        name = "leftRun",
+        frames = { 21,22,23 },
+        time = 400,
+        loopCount = 0
+    },
+    {
+      name = "rightRun",
+      frames = { 16,17,18 },
+      time = 400,
+      loopCount = 0
+    },
+    {
+      name = "upRun",
+      frames = { 4,5 },
+      time = 400,
+      loopCount = 0
+    },
+    {
+      name = "downRun",
+      frames = { 1,2,3 },
+      time = 400,
+      loopCount = 0
+    },
+    {
+      name = "upLeftRun",
+      frames = { 1,2,3 },
+      time = 400,
+      loopCount = 0
+    },
+    {
+      name = "upRightRun",
+      frames = { 1,2,3 },
+      time = 400,
+      loopCount = 0
+    },
+    {
+      name = "downLeftRun",
+      frames = { 1,2,3 },
+      time = 400,
+      loopCount = 0
+    },
+    {
+      name = "downRightRun",
+      frames = { 1,2,3 },
+      time = 400,
+      loopCount = 0
     }
-}]]
---local mageRun = display.newSprite(mainGroup, mageSheet, sequences_runningMage)
+}
+local mageRun = display.newSprite(mainGroup, mageSheet, sequences_runningMage)
 
     -- GAME PHYSICS --
     local physics = require("physics")
         physics.start()
         physics.setGravity(0, 0)
-
 
     -- VARIABLES --
     local livesPlayer = 1
@@ -301,7 +348,7 @@ local mageSheet = graphics.newImageSheet("mageSpriteSheet.png", mageSheetOptions
     local mapLevel = 0
 
     -- PLAYER PHYSICS --
-    local player = display.newImageRect( mainGroup, "player.png",72,72) -- (72x72)pixels per box to have 400 positions on the map. 20per row.
+    local player = mageRun -- (72x72)pixels per box to have 400 positions on the map. 20per row.
     player.x = 190
     player.y = 180
     physics.addBody( player, "dynamic",{density =5000})
@@ -327,7 +374,7 @@ local mageSheet = graphics.newImageSheet("mageSpriteSheet.png", mageSheetOptions
 
     local function addWallsLine(X1, X2, Y1, Y2) --function to add walls in lines.
       if X1 == X2 and Y1 ~= Y2 then             --This function should be considered art.
-        if Y1 > Y2 then
+        if Y1 > Y2 then                         --By Master painter Kubo from the far away kingdom of Slovakia
           local temp = Y2
           Y2 = Y1
           Y1 = temp
@@ -464,74 +511,56 @@ end
        if event.phase == "down" then
          Vx = Vx - 200
          player:setLinearVelocity(Vx,Vy)
-        -- player:play()
-         --previousLeft = 1
-        -- if previousRight == 1 or previousRight == 2 then
-           --player:scale(-1, 1)
-           --previousRight = 0
-         --end
-         --player:applyLinearImpulse(-.5,0,player.x,player.y)
-          --transition.to(player, {time = 3000, x = player.x - 1000})
+         player:setSequence( "leftRun" )
+         player:play()
         elseif event.phase == "up" then
           Vx = Vx + 200
           player:setLinearVelocity(Vx,Vy)
-          --player:pause()
-          --player:setFrame(1)
-          --player:applyLinearImpulse(0.5,0,player.x,player.y)
-          --transition.cancel()
+          player:setSequence( "everything" )
+          player:pause()
+          player:setFrame(1)
        end
     end
     if event.keyName == "d" then
        if event.phase == "down" then
          Vx = Vx + 200
          player:setLinearVelocity(Vx,Vy)
-         --player:play()
-         --previousRight = 1
-         --if previousLeft == 1 then
-           --player:scale(-1, 1)
-           --previousLeft = 0
-         --end
-         --player:applyLinearImpulse(.5,0,player.x,player.y)
-          --transition.to(player, {time = 3000, x = player.x  + 1000})
+         player:setSequence( "rightRun" )
+         player:play()
         elseif event.phase == "up" then
           Vx = Vx - 200
           player:setLinearVelocity(Vx,Vy)
-          --player:pause()
-          --player:setFrame(1)
-          --player:applyLinearImpulse(-.5,0,player.x,player.y)
-          --transition.cancel()
+          player:setSequence( "everything" )
+          player:pause()
+          player:setFrame(1)
        end
     end
     if event.keyName == "w" then
        if event.phase == "down" then
          Vy = Vy-200
          player:setLinearVelocity(Vx,Vy)
-         --player:play()
-         --player:applyLinearImpulse(0,-.5,player.x,player.y)
-          --transition.to(player, {time = 3000, y = player.y  - 1000})
+         player:setSequence( "upRun" )
+         player:play()
         elseif event.phase == "up" then
           Vy = Vy + 200
           player:setLinearVelocity(Vx,Vy)
-          --player:pause()
-          --player:setFrame(1)
-          --player:applyLinearImpulse(0,.5,player.x,player.y)
-          --transition.cancel()
+          player:setSequence( "everything" )
+          player:pause()
+          player:setFrame(1)
        end
     end
     if event.keyName == "s" then
        if event.phase == "down" then
          Vy = Vy + 200
          player:setLinearVelocity(Vx,Vy)
-         --player:play()
-         --player:applyLinearImpulse(0,.5,player.x,player.y)
-          --transition.to(player, {time = 3000, y = player.y  + 1000})
+         player:setSequence( "downRun" )
+         player:play()
         elseif event.phase == "up" then
           Vy = Vy - 200
           player:setLinearVelocity(Vx,Vy)
-          --player:pause()
-          --player:setFrame(1)
-          --player:applyLinearImpulse(0,-.5,player.x,player.y)
-          --transition.cancel()
+          player:setSequence( "everything" )
+          player:pause()
+          player:setFrame(1)
        end
     end
   end
@@ -559,36 +588,31 @@ end
     Runtime:addEventListener("tap", ProteinProjectile)
 
  --Breakable wall break --
-local function wallBreak()
-  --Protein.removeSelf()
-  breakableWall:removeSelf()
-end
-breakableWall.collision = wallBreak
-breakableWall:addEventListener("collision")
-
-local function onLocalCollision( self, event )   -- Protein Projectile detection function
-  local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
-  if(event.target.type=="enemy" and event.other.type=="protein") then       --Makes sure its protein which is hitting it.
-    if event.phase == "began" then
-    local oof = audio.play(enemyHit)
+  local function wallBreak()
+    breakableWall:removeSelf()
   end
+  breakableWall.collision = wallBreak
+  breakableWall:addEventListener("collision")
+
+  local function onLocalCollision( self, event )   -- Protein Projectile detection function
+    local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
+    if(event.target.type=="enemy" and event.other.type=="protein") then       --Makes sure its protein which is hitting it.
+      if event.phase == "began" then
+        local oof = audio.play(enemyHit)
+      end
+    end
+    if(event.target.type=="player" and event.other.type=="ShittyNutrients") then
+      if event.phase == "began" then
+        local oof = audio.play(enemyHit)
+      end
+    end
   end
-  if(event.target.type=="player" and event.other.type=="ShittyNutrients") then
-    if event.phase == "began" then
-    local oof = audio.play(enemyHit)
-  end
-  end
-end
 
-enemy.collision = onLocalCollision
-enemy:addEventListener( "collision" ) --Checks if enemy has been hit by anything.
+  enemy.collision = onLocalCollision
+  enemy:addEventListener( "collision" ) --Checks if enemy has been hit by anything.
 
-player.collision = onLocalCollision
-player:addEventListener("collision")
-
-
-
-
+  player.collision = onLocalCollision
+  player:addEventListener("collision")
 
 end --end for mageIconClicked
 mageIcon:addEventListener( "tap", mageIconClicked )
