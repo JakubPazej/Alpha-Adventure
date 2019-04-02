@@ -13,6 +13,7 @@ local bgVolume = 0.15
 audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to bgVolume
 
 local buttonSound = audio.loadSound("buttonSound.mp3")
+local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
 
 -- UI BACKGROUND --
 local background = display.newImageRect( backGroup, "ui_background.png", 1920, 1080 ) --declaring background image
@@ -581,6 +582,16 @@ end
       local eX = scaleUpPoint(player.x, event.x, 1.01, 1)
       local eY = scaleUpPoint(player.y, event.y, 1.01, 1)
       transition.to(Protein, {x=eX,y=eY,time=Math1/0.01})
+
+    --[[  local function removeProtein( self, event )
+        if(event.target.type=="protein") then
+          if event.phase == "began" then
+            Protein:removeSelf()
+          end
+        end
+      end
+    Protein.collision = removeProtein
+    Protein:addEventListener("collision") --]]
   end
 
     Runtime:addEventListener("preCollision", EnemyDetectRange)
@@ -595,15 +606,16 @@ end
   breakableWall:addEventListener("collision")
 
   local function onLocalCollision( self, event )   -- Protein Projectile detection function
-    local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
     if(event.target.type=="enemy" and event.other.type=="protein") then       --Makes sure its protein which is hitting it.
       if event.phase == "began" then
-        local oof = audio.play(enemyHit)
+        local oof = audio.play(enemyHit, {channel = 2})
+        audio.setMaxVolume(bgVolume, {channel=2})
       end
     end
     if(event.target.type=="player" and event.other.type=="ShittyNutrients") then
       if event.phase == "began" then
-        local oof = audio.play(enemyHit)
+        local oof = audio.play(enemyHit, {channel = 2})
+        audio.setMaxVolume(bgVolume, {channel=2})
       end
     end
   end
