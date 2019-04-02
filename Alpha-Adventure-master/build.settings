@@ -1,0 +1,37 @@
+settings =
+{
+	orientation =
+	{
+		default = "portrait",
+		supported = { "portrait",
+	},
+--[[
+	win32 =
+    {
+        preferenceStorage = "sqlite",
+				defaultMode = "fullscreen",
+				singleInstance = true,
+    }
+		]]--
+	},
+	---------------------
+	-- Plugins section --
+	---------------------
+	plugins =
+	{
+					["plugin.mouseHover"] =
+					{
+									-- required
+									publisherId = "sg.btn",
+					},
+	},
+
+	---------------------
+	-- Project section --
+	---------------------
+	excludeFiles =
+	{
+		all = { "Icon.png", "Icon-*dpi.png", "Images.xcassets", },
+		android = { "LaunchScreen.storyboardc", },
+	},
+}
