@@ -13,6 +13,7 @@ local bgVolume = 0.15
 audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to bgVolume
 
 local buttonSound = audio.loadSound("buttonSound.mp3")
+local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
 
 -- UI BACKGROUND --
 local background = display.newImageRect( backGroup, "ui_background.png", 1920, 1080 ) --declaring background image
@@ -472,15 +473,19 @@ end
 --If the player gets too close the enemy will fire projectiles at them.
 --The close the player is to an enemy the higher the rate of fire.
   function EnemyDetectRange(event)
-    if(event.target.type=="enemy" and event.other.type=="player") then
-    while math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 2500 and math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 1250 do
-      timer.performWithDelay(600, EnemyAttack)
+    if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 2500 then
+      for i=0, 10, i+1 do
+      timer.performWithDelay(500, EnemyAttack)
+      if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 2500 then break end
+    end
+    if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 1250 then
+      for i=0, 10, i+1 do
+        timer.performWithDelay(420, EnemyAttack)
+        if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 1250 then break end
+      end
     end
   end
-    while math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 1250 do
-      timer.performWithDelay(300, EnemyAttack)
-    end
-  end
+end
 
   local  randomMovementEnemy = function() --endless loop for generating random number for enemy to change movements
     local minus1 =1
@@ -577,9 +582,19 @@ end
       local eX = scaleUpPoint(player.x, event.x, 1.01, 1)
       local eY = scaleUpPoint(player.y, event.y, 1.01, 1)
       transition.to(Protein, {x=eX,y=eY,time=Math1/0.01})
+
+    --[[  local function removeProtein( self, event )
+        if(event.target.type=="protein") then
+          if event.phase == "began" then
+            Protein:removeSelf()
+          end
+        end
+      end
+    Protein.collision = removeProtein
+    Protein:addEventListener("collision") --]]
   end
 
-    enemy:addEventListener("preCollision", EnemyDetectRange)
+    Runtime:addEventListener("preCollision", EnemyDetectRange)
     Runtime:addEventListener("key", onKeyEvent)
     Runtime:addEventListener("tap", ProteinProjectile)
 
@@ -591,15 +606,16 @@ end
   breakableWall:addEventListener("collision")
 
   local function onLocalCollision( self, event )   -- Protein Projectile detection function
-    local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
     if(event.target.type=="enemy" and event.other.type=="protein") then       --Makes sure its protein which is hitting it.
       if event.phase == "began" then
-        local oof = audio.play(enemyHit)
+        local oof = audio.play(enemyHit, {channel = 2})
+        audio.setMaxVolume(bgVolume, {channel=2})
       end
     end
     if(event.target.type=="player" and event.other.type=="ShittyNutrients") then
       if event.phase == "began" then
-        local oof = audio.play(enemyHit)
+        local oof = audio.play(enemyHit, {channel = 2})
+        audio.setMaxVolume(bgVolume, {channel=2})
       end
     end
   end
