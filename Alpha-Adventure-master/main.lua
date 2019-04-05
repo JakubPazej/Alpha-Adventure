@@ -431,6 +431,18 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
   Heart1.isVisible = true
   Heart2.isVisible = true
   Heart3.isVisible = true
+  local emptyHeart1 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
+  local emptyHeart2 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
+  local emptyHeart3 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
+  emptyHeart1.x = 200
+  emptyHeart2.x = 150
+  emptyHeart3.x = 100
+  emptyHeart1.y = 1045
+  emptyHeart2.y = 1045
+  emptyHeart3.y = 1045
+  emptyHeart1.isVisible = false
+  emptyHeart2.isVisible = false
+  emptyHeart3.isVisible = false
 
 function getHit(event)
 end
@@ -612,13 +624,8 @@ end
 
 
   local reee = 1
-  local emptyHeart1 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
-  local emptyHeart2 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
-  local emptyHeart3 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
-  emptyHeart1.isVisible = false
-  emptyHeart2.isVisible = false
-  emptyHeart3.isVisible = false
-  local function onLocalCollision( self, event )   -- Protein Projectile detection function
+
+  local function onLocalCollision( self, event )      -- Protein Projectile detection function
     local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
     if(event.target.type=="enemy" and event.other.type=="protein") then       --Makes sure its protein which is hitting it.
       if event.phase == "began" then
