@@ -411,7 +411,7 @@ addWallsLine( 36, 36, 616, 976 ) --left down
 addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
 
   -- UI --               -- Health Bar , Armor, Mana , Items
-  local function addHeart(X, Y) --adding a function to make adding a wall easier
+  --[[local function addHeart(X, Y) --adding a function to make adding a wall easier
     fullHeart = display.newImageRect(mainGroup,"Heart.png",72,72, X, Y)
     fullHeart.x = X
     fullHeart.y = Y
@@ -419,7 +419,16 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
   local playerLives = 3
   addHeart(100,1045)
   addHeart(150,1045)
-  addHeart(200,1045)
+  addHeart(200,1045)]]
+  local Heart1 = display.newImageRect(mainGroup,"Heart.png",72,72)
+  local Heart2 = display.newImageRect(mainGroup,"Heart.png",72,72, 150, 1045)
+  local Heart3 = display.newImageRect(mainGroup,"Heart.png",72,72, 200, 1045)
+  Heart1.x = 100
+  Heart2.x = 150
+  Heart3.x = 200
+  Heart1.y = 1045
+  Heart2.y = 1045
+  Heart3.y = 1045
 function getHit(event)
 end
   local function addMana(X, Y) --adding a function to make adding a wall easier
