@@ -606,6 +606,7 @@ local function onLocalCollision( self, event )   -- Protein Projectile detection
       emptyHeart2.y = 1045
       reee = reee +1
     end
+    
   end
     else if reee == 3 then
       Heart1.isVisible = false
