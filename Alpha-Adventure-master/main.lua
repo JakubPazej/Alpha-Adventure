@@ -410,15 +410,28 @@ addWallsLine( 36, 36, 616, 976 ) --left down
 addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
 
   -- UI --               -- Health Bar , Armor, Mana , Items
-  local function addHeart(X, Y) --adding a function to make adding a wall easier
-    fullHeart = display.newImageRect(mainGroup,"Heart.png",72,72, X, Y)
+--[[  local function addHeart(X, Y) --adding a function to make adding a wall easier
+    local fullHeart = display.newImageRect(mainGroup,"Heart.png",72,72, X, Y)
     fullHeart.x = X
     fullHeart.y = Y
   end
   local playerLives = 3
   addHeart(100,1045)
   addHeart(150,1045)
-  addHeart(200,1045)
+  addHeart(200,1045)]]
+  local Heart1 = display.newImageRect(mainGroup,"Heart.png",72,72)
+  local Heart2 = display.newImageRect(mainGroup,"Heart.png",72,72)
+  local Heart3 = display.newImageRect(mainGroup,"Heart.png",72,72)
+  Heart1.x = 100
+  Heart2.x = 150
+  Heart3.x = 200
+  Heart1.y = 1045
+  Heart2.y = 1045
+  Heart3.y = 1045
+  Heart1.isVisible = true
+  Heart2.isVisible = true
+  Heart3.isVisible = true
+
 function getHit(event)
 end
   local function addMana(X, Y) --adding a function to make adding a wall easier
@@ -597,7 +610,50 @@ end
   breakableWall.collision = wallBreak
   breakableWall:addEventListener("collision")
 
+
+  local reee = 1
+  local emptyHeart1 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
+  local emptyHeart2 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
+  local emptyHeart3 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
+  emptyHeart1.isVisible = false
+  emptyHeart2.isVisible = false
+  emptyHeart3.isVisible = false
   local function onLocalCollision( self, event )   -- Protein Projectile detection function
+    local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
+    if(event.target.type=="enemy" and event.other.type=="protein") then       --Makes sure its protein which is hitting it.
+      if event.phase == "began" then
+      local oof = audio.play(enemyHit)
+    end
+    end
+    if(event.target.type=="player" and event.other.type=="ShittyNutrients") then
+      if event.phase == "began" then
+      local oof = audio.play(enemyHit)
+      if reee==1 then
+        Heart3.isVisible = false
+        emptyHeart1.isVisible = true
+        emptyHeart1.x = 200
+        emptyHeart1.y = 1045
+        reee = reee +1
+      end
+
+      else if reee == 2 then
+        Heart2.isVisible = false
+        emptyHeart2.isVisible = true
+        emptyHeart2.x = 150
+        emptyHeart2.y = 1045
+        reee = reee +1
+      end
+    end
+      else if reee == 3 then
+        Heart1.isVisible = false
+        emptyHeart3.isVisible = true
+        emptyHeart3.x = 100
+        emptyHeart3.y = 1045
+        reee = reee +1
+      end
+    end
+    end
+  --[[local function onLocalCollision( self, event )   -- Protein Projectile detection function
     local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
     if(event.target.type=="enemy" and event.other.type=="protein") then       --Makes sure its protein which is hitting it.
       if event.phase == "began" then
@@ -609,7 +665,7 @@ end
         local oof = audio.play(enemyHit)
       end
     end
-  end
+  end]]
 
   enemy.collision = onLocalCollision
   enemy:addEventListener( "collision" ) --Checks if enemy has been hit by anything.
