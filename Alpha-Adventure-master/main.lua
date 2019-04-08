@@ -9,7 +9,7 @@ local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 -- Sounds & Music --
 local backgroundMusic = audio.loadStream("28_爱给网_aigei_com .mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
-local bgVolume = 0.15
+local bgVolume = 0--.15
 audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to bgVolume
 
 local buttonSound = audio.loadSound("buttonSound.mp3")
@@ -478,20 +478,22 @@ end
 
 --Enemy attack function.
   function EnemyAttack(event)
-    local ShittyNutrients = display.newImageRect(mainGroup,"Protein.png", 40, 40)
-    local Math2
-    ShittyNutrients.isVisible = true
-    ShittyNutrients.isBullet = true
-    ShittyNutrients.type = "ShittyNutrients"
-    ShittyNutrients.x = enemy.x
-    ShittyNutrients.y = enemy.y
-    physics.addBody(ShittyNutrients, "dynamic", {filter=blueCollision})
-    ShittyNutrients.isSensor = true
-    ShittyNutrients.isFixedRotation = false
-    Math2 = math.sqrt(math.pow((player.x - enemy.x),2) + math.pow((player.y - enemy.y),2 ))
-      local EX = scaleUpPoint(enemy.x, player.x, 1.01, 1)
-      local EY = scaleUpPoint(enemy.y, player.y, 1.01, 1)
-      transition.to(ShittyNutrients, {x=EX,y=EY,time=Math2/0.002})
+    if enemy.isVisible == true then
+      local ShittyNutrients = display.newImageRect(mainGroup,"Protein.png", 40, 40)
+      local Math2
+      ShittyNutrients.isVisible = true
+      ShittyNutrients.isBullet = true
+      ShittyNutrients.type = "ShittyNutrients"
+      ShittyNutrients.x = enemy.x
+      ShittyNutrients.y = enemy.y
+      physics.addBody(ShittyNutrients, "dynamic", {filter=blueCollision})
+      ShittyNutrients.isSensor = true
+      ShittyNutrients.isFixedRotation = false
+      Math2 = math.sqrt(math.pow((player.x - enemy.x),2) + math.pow((player.y - enemy.y),2 ))
+        local EX = scaleUpPoint(enemy.x, player.x, 1.01, 1)
+        local EY = scaleUpPoint(enemy.y, player.y, 1.01, 1)
+        transition.to(ShittyNutrients, {x=EX,y=EY,time=Math2/0.002})
+      end
     end
 
 --If the player gets too close the enemy will fire projectiles at them.
@@ -589,10 +591,15 @@ end
        end
     end
   end
+  local click1 = 1
+  function shootyshooty (event)
+    click1 = 1
+  end
 
   function proteinProjectile(event)
-    if event.isPrimaryButtonDown then
+    if (event.isPrimaryButtonDown and click1 == 1) then
     local Math1
+    click1 = 5
     local Protein = display.newImageRect(mainGroup,"Protein.png", 70, 70)
     Protein.isVisible = true
     Protein.isBullet = true
@@ -607,6 +614,11 @@ end
       local eX = scaleUpPoint(player.x, event.x, 1.01, 1)
       local eY = scaleUpPoint(player.y, event.y, 1.01, 1)
       transition.to(Protein, {x=eX,y=eY,time=Math1/0.01})
+
+      timer.performWithDelay(1000, shootyshooty)
+    --if (event.isPrimaryButtonUp)then
+      --click1 = 1
+    --end
   end
 end
 
@@ -614,6 +626,7 @@ end
     Runtime:addEventListener("preCollision", EnemyDetectRange)
     Runtime:addEventListener("key", onKeyEvent)
     Runtime:addEventListener("mouse", proteinProjectile)
+    timer.performWithDelay( 1000, randomMovementEnemy, -1)
 
  --Breakable wall break --
   local function wallBreak()
@@ -629,7 +642,11 @@ end
     local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
     if(event.target.type=="enemy" and event.other.type=="protein") then       --Makes sure its protein which is hitting it.
       if event.phase == "began" then
-      local oof = audio.play(enemyHit)
+        if enemy.isVisible == true then
+          local oof = audio.play(enemyHit)
+          enemy.isVisible = false
+        end
+
     end
     end
     if(event.target.type=="player" and event.other.type=="ShittyNutrients") then
