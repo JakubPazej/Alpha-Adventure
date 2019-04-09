@@ -600,7 +600,8 @@ end
   function shootyshooty (event)
     click1 = 1
   end
-  local reee = 1
+  local reee = 0
+  local PainSufferingDeath = 1       -- The three stages, first comes pain, second comes suffering and finally DEATH
 
   function proteinProjectile(event)
     if (event.isPrimaryButtonDown and click1 == 1) then
@@ -658,50 +659,73 @@ end
     if(event.target.type=="enemy" and event.other.type=="protein") then       --Makes sure its protein which is hitting it.
       if event.phase == "began" then
         if enemy.isVisible == true then
+          if PainSufferingDeath == 1 then
           local oof = audio.play(enemyHit)
-          enemy.isVisible = false
+          PainSufferingDeath = PainSufferingDeath + 1
+
+          else if PainSufferingDeath == 2 then
+            local oof = audio.play(enemyHit)
+            PainSufferingDeath = PainSufferingDeath + 1
+
+          else if PainSufferingDeath == 3 then
+            local oof = audio.play(enemyHit)
+            PainSufferingDeath = 1
+            enemy.isVisible = false
+          end
         end
       end
     end
+  end
+end
+
+
+
     --[[if(event.target.type == "wall" and event.other.type == "protein") then
       display.remove (event.other)
       event.other = nil
     end]]
-    if(event.target.type=="player" and event.other.type=="ShittyNutrients") then
-      if event.phase == "began" then
+    local function playerLifeDetect( self, event )
+            print("====> "..99.9)
+
+    if(event.other.type=="player" and event.target.type=="ShittyNutrients") then
+      print("collision")
+      reee = reee +1
+      if (event.phase == "began") then
       local oof = audio.play(enemyHit)
-      if reee==1 then
-        Heart3.isVisible = false
-        emptyHeart1.isVisible = true
-        emptyHeart1.x = 200
-        emptyHeart1.y = 1045
-        reee = reee +1
-      end
+        if (reee==1) then
+          Heart3.isVisible = false
+          emptyHeart1.isVisible = true
+          emptyHeart1.x = 200
+          emptyHeart1.y = 1045
 
-      else if reee == 2 then
-        Heart2.isVisible = false
-        emptyHeart2.isVisible = true
-        emptyHeart2.x = 150
-        emptyHeart2.y = 1045
-        reee = reee +1
-      end
-    end
-      else if reee == 3 then
-        Heart1.isVisible = false
-        emptyHeart3.isVisible = true
-        emptyHeart3.x = 100
-        emptyHeart3.y = 1045
-        reee = reee +1
-        local gameOver = display.newImageRect(mainGroup,"GameOver.png", 1920, 1080)
-        gameOver.x = 1920/2
-        gameOver.y = 1080/2
-        enemy.isVisible = false
-        player.isVisible = false
+          print("====> "..1)
 
+        else if reee == 2 then
+          Heart2.isVisible = false
+          emptyHeart2.isVisible = true
+          emptyHeart2.x = 150
+          emptyHeart2.y = 1045
+          print("====> "..2)
 
+        else if reee == 3 then
+          print("====> "..3)
+          Heart1.isVisible = false
+          emptyHeart3.isVisible = true
+          emptyHeart3.x = 100
+          emptyHeart3.y = 1045
+          local gameOver = display.newImageRect(mainGroup,"GameOver.png", 1920, 1080)
+          gameOver.x = 1920/2
+          gameOver.y = 1080/2
+          enemy.isVisible = false
+          player.isVisible = false
+        end
       end
     end
-    end
+  end
+end
+end
+end
+
 
   --[[local function onLocalCollision( self, event )   -- Protein Projectile detection function
     local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
@@ -720,7 +744,7 @@ end
   enemy.collision = onLocalCollision
   enemy:addEventListener( "collision" ) --Checks if enemy has been hit by anything.
 
-  player.collision = onLocalCollision
+  player.collision = playerLifeDetect
   player:addEventListener("collision")
 
   --Walls.collision = wallCollision
