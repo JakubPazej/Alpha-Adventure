@@ -9,11 +9,10 @@ local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 -- Sounds & Music --
 local backgroundMusic = audio.loadStream("28_爱给网_aigei_com .mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
-local bgVolume = 0.15
+local bgVolume = 0--.15
 audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to bgVolume
 
 local buttonSound = audio.loadSound("buttonSound.mp3")
-local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
 
 -- UI BACKGROUND --
 local background = display.newImageRect( backGroup, "ui_background.png", 1920, 1080 ) --declaring background image
@@ -365,12 +364,14 @@ local mageRun = display.newSprite(mainGroup, mageSheet, sequences_runningMage)
     Walls.x = 36
     Walls.y =36
     physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
+
     local function addWall(coordinateX, coordinateY) --adding a function to make adding a wall easier
         Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
         Walls.x = coordinateX
         Walls.y = coordinateY
         physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
         Walls.gravityScale =0
+        Walls.type = "wall"
     end
 
     local function addWallsLine(X1, X2, Y1, Y2) --function to add walls in lines.
@@ -409,10 +410,13 @@ breakableWall.y =542.5
 physics.addBody( breakableWall, "static", {bounce = 0.0, friction = 50, density = 150, filter = blueCollision} )
 addWallsLine( 36, 36, 616, 976 ) --left down
 addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
+addWall(300,800)
+addWall(700,900)
+Walls.type = "wall"
 
   -- UI --               -- Health Bar , Armor, Mana , Items
-  --[[local function addHeart(X, Y) --adding a function to make adding a wall easier
-    fullHeart = display.newImageRect(mainGroup,"Heart.png",72,72, X, Y)
+--[[  local function addHeart(X, Y) --adding a function to make adding a wall easier
+    local fullHeart = display.newImageRect(mainGroup,"Heart.png",72,72, X, Y)
     fullHeart.x = X
     fullHeart.y = Y
   end
@@ -421,14 +425,30 @@ addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
   addHeart(150,1045)
   addHeart(200,1045)]]
   local Heart1 = display.newImageRect(mainGroup,"Heart.png",72,72)
-  local Heart2 = display.newImageRect(mainGroup,"Heart.png",72,72, 150, 1045)
-  local Heart3 = display.newImageRect(mainGroup,"Heart.png",72,72, 200, 1045)
+  local Heart2 = display.newImageRect(mainGroup,"Heart.png",72,72)
+  local Heart3 = display.newImageRect(mainGroup,"Heart.png",72,72)
   Heart1.x = 100
   Heart2.x = 150
   Heart3.x = 200
   Heart1.y = 1045
   Heart2.y = 1045
   Heart3.y = 1045
+  Heart1.isVisible = true
+  Heart2.isVisible = true
+  Heart3.isVisible = true
+  local emptyHeart1 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
+  local emptyHeart2 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
+  local emptyHeart3 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
+  emptyHeart1.x = 200
+  emptyHeart2.x = 150
+  emptyHeart3.x = 100
+  emptyHeart1.y = 1045
+  emptyHeart2.y = 1045
+  emptyHeart3.y = 1045
+  emptyHeart1.isVisible = false
+  emptyHeart2.isVisible = false
+  emptyHeart3.isVisible = false
+
 function getHit(event)
 end
   local function addMana(X, Y) --adding a function to make adding a wall easier
@@ -463,20 +483,22 @@ end
 
 --Enemy attack function.
   function EnemyAttack(event)
-    local ShittyNutrients = display.newImageRect(mainGroup,"Protein.png", 40, 40)
-    local Math2
-    ShittyNutrients.isVisible = true
-    ShittyNutrients.isBullet = true
-    ShittyNutrients.type = "ShittyNutrients"
-    ShittyNutrients.x = enemy.x
-    ShittyNutrients.y = enemy.y
-    physics.addBody(ShittyNutrients, "dynamic", {filter=blueCollision})
-    ShittyNutrients.isSensor = true
-    ShittyNutrients.isFixedRotation = false
-    Math2 = math.sqrt(math.pow((player.x - enemy.x),2) + math.pow((player.y - enemy.y),2 ))
-      local EX = scaleUpPoint(enemy.x, player.x, 1.01, 1)
-      local EY = scaleUpPoint(enemy.y, player.y, 1.01, 1)
-      transition.to(ShittyNutrients, {x=EX,y=EY,time=Math2/0.002})
+    if enemy.isVisible == true then
+      local ShittyNutrients = display.newImageRect(mainGroup,"Protein.png", 40, 40)
+      local Math2
+      ShittyNutrients.isVisible = true
+      ShittyNutrients.isBullet = true
+      ShittyNutrients.type = "ShittyNutrients"
+      ShittyNutrients.x = enemy.x
+      ShittyNutrients.y = enemy.y
+      physics.addBody(ShittyNutrients, "dynamic", {filter=blueCollision})
+      ShittyNutrients.isSensor = true
+      ShittyNutrients.isFixedRotation = false
+      Math2 = math.sqrt(math.pow((player.x - enemy.x),2) + math.pow((player.y - enemy.y),2 ))
+        local EX = scaleUpPoint(enemy.x, player.x, 1.01, 1)
+        local EY = scaleUpPoint(enemy.y, player.y, 1.01, 1)
+        transition.to(ShittyNutrients, {x=EX,y=EY,time=Math2/0.002})
+      end
     end
 
 --If the player gets too close the enemy will fire projectiles at them.
@@ -574,9 +596,16 @@ end
        end
     end
   end
+  local click1 = 1
+  function shootyshooty (event)
+    click1 = 1
+  end
+  local reee = 1
 
-  function ProteinProjectile(event)
+  function proteinProjectile(event)
+    if (event.isPrimaryButtonDown and click1 == 1) then
     local Math1
+    click1 = 5
     local Protein = display.newImageRect(mainGroup,"Protein.png", 70, 70)
     Protein.isVisible = true
     Protein.isBullet = true
@@ -592,20 +621,18 @@ end
       local eY = scaleUpPoint(player.y, event.y, 1.01, 1)
       transition.to(Protein, {x=eX,y=eY,time=Math1/0.01})
 
-    --[[  local function removeProtein( self, event )
-        if(event.target.type=="protein") then
-          if event.phase == "began" then
-            Protein:removeSelf()
-          end
-        end
-      end
-    Protein.collision = removeProtein
-    Protein:addEventListener("collision") --]]
+      timer.performWithDelay(1000, shootyshooty)
+    --if (event.isPrimaryButtonUp)then
+      --click1 = 1
+    --end
   end
+end
+
 
     Runtime:addEventListener("preCollision", EnemyDetectRange)
     Runtime:addEventListener("key", onKeyEvent)
-    Runtime:addEventListener("tap", ProteinProjectile)
+    Runtime:addEventListener("mouse", proteinProjectile)
+    timer.performWithDelay( 1000, randomMovementEnemy, -1)
 
  --Breakable wall break --
   local function wallBreak()
@@ -614,26 +641,90 @@ end
   breakableWall.collision = wallBreak
   breakableWall:addEventListener("collision")
 
-  local function onLocalCollision( self, event )   -- Protein Projectile detection function
+
+  local function wallCollision( self, event )
+      if  (event.target.type == "wall" and event.other.type == "protein") then
+        if event.phase =="began" then
+        display.remove(event.other)
+        event.other= nil
+      end
+    end
+  end
+    Walls.collision = wallCollision
+    Walls:addEventListener("collision")
+
+  local function onLocalCollision( self, event )      -- Protein Projectile detection function
+    local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
     if(event.target.type=="enemy" and event.other.type=="protein") then       --Makes sure its protein which is hitting it.
       if event.phase == "began" then
-        local oof = audio.play(enemyHit, {channel = 2})
-        audio.setMaxVolume(bgVolume, {channel=2})
+        if enemy.isVisible == true then
+          local oof = audio.play(enemyHit)
+          enemy.isVisible = false
+        end
+      end
+    end
+    --[[if(event.target.type == "wall" and event.other.type == "protein") then
+      display.remove (event.other)
+      event.other = nil
+    end]]
+    if(event.target.type=="player" and event.other.type=="ShittyNutrients") then
+      if event.phase == "began" then
+      local oof = audio.play(enemyHit)
+      if reee==1 then
+        Heart3.isVisible = false
+        emptyHeart1.isVisible = true
+        emptyHeart1.x = 200
+        emptyHeart1.y = 1045
+        reee = reee +1
+      end
+
+      else if reee == 2 then
+        Heart2.isVisible = false
+        emptyHeart2.isVisible = true
+        emptyHeart2.x = 150
+        emptyHeart2.y = 1045
+        reee = reee +1
+      end
+    end
+      else if reee == 3 then
+        Heart1.isVisible = false
+        emptyHeart3.isVisible = true
+        emptyHeart3.x = 100
+        emptyHeart3.y = 1045
+        reee = reee +1
+        local gameOver = display.newImageRect(mainGroup,"GameOver.png", 1920, 1080)
+        gameOver.x = 1920/2
+        gameOver.y = 1080/2
+        enemy.isVisible = false
+        player.isVisible = false
+
+
+      end
+    end
+    end
+
+  --[[local function onLocalCollision( self, event )   -- Protein Projectile detection function
+    local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
+    if(event.target.type=="enemy" and event.other.type=="protein") then       --Makes sure its protein which is hitting it.
+      if event.phase == "began" then
+        local oof = audio.play(enemyHit)
       end
     end
     if(event.target.type=="player" and event.other.type=="ShittyNutrients") then
       if event.phase == "began" then
-        local oof = audio.play(enemyHit, {channel = 2})
-        audio.setMaxVolume(bgVolume, {channel=2})
+        local oof = audio.play(enemyHit)
       end
     end
-  end
+  end]]
 
   enemy.collision = onLocalCollision
   enemy:addEventListener( "collision" ) --Checks if enemy has been hit by anything.
 
   player.collision = onLocalCollision
   player:addEventListener("collision")
+
+  --Walls.collision = wallCollision
+  --Walls:addEventListener("collision")
 
 end --end for mageIconClicked
 mageIcon:addEventListener( "tap", mageIconClicked )
