@@ -9,15 +9,26 @@ local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 -- Sounds & Music --
 local backgroundMusic = audio.loadStream("28_爱给网_aigei_com .mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
-local bgVolume = 0--.15
+local bgVolume = 0.15--.15
 audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to bgVolume
+audio.setVolume(bgVolume)
 
 local buttonSound = audio.loadSound("buttonSound.mp3")
 
--- UI BACKGROUND --
+-- UI BACKGROUNDS --
 local background = display.newImageRect( backGroup, "ui_background.png", 1920, 1080 ) --declaring background image
     background.x = display.contentCenterX
     background.y = display.contentCenterY
+
+local backgroundtwo = display.newImageRect( backGroup, "ui_backgroundtwo.png", 1920, 1080 ) --declaring background image
+    backgroundtwo.x = display.contentCenterX
+    backgroundtwo.y = display.contentCenterY
+    backgroundtwo.isVisible = false
+
+local backgroundthree = display.newImageRect( backGroup, "ui_backgroundthree.png", 1920, 1080 ) --declaring background image
+    backgroundthree.x = display.contentCenterX
+    backgroundthree.y = display.contentCenterY
+    backgroundthree.isVisible = false
 
 -- EXIT BUTTON --
 local exitButton = display.newImageRect( uiGroup, "exitbutton.png", 75, 77 ) -- declaring exit button
@@ -38,7 +49,7 @@ local onMouseHoverExit = function(event) -- exit button interactable by getting 
 end
 exitButton:addEventListener( "mouseHover", onMouseHoverExit ) -- points to the function above
 
--- CONTINUE BUTTON --
+--[[-- CONTINUE BUTTON --
 local continueButton = display.newImageRect( uiGroup, "continuebutton.png", 658, 180 ) -- declaring continue button
     continueButton.x = display.contentCenterX - 250
     continueButton.y = display.contentCenterY - 200
@@ -56,7 +67,7 @@ local onMouseHover = function(event) -- Continue lights up when hovered over
             continueButtonLight.isVisible = false
     end
 end
-continueButton:addEventListener( "mouseHover", onMouseHover ) -- points to the function above
+continueButton:addEventListener( "mouseHover", onMouseHover ) -- points to the function above --]]
 
 -- NEW GAME BUTTON --
 local newButton = display.newImageRect( uiGroup, "newbutton.png", 658, 180 ) -- declaring new game button
@@ -103,7 +114,9 @@ end
 menuButton:addEventListener( "mouseHover", onMouseHover3 ) --Points to the function above
 
 local function menuClicked() --When menu is clicked
-    continueButton.isVisible = false
+    background.isVisible = false
+    backgroundtwo.isVisible = true
+    --continueButton.isVisible = false
     newButton.isVisible = false
     menuButton.isVisible = false
     menuButtonLight.isVisible = false
@@ -158,7 +171,7 @@ local function menuClicked() --When menu is clicked
     soundOnBox:addEventListener("tap", muteBgmButton)
     soundOffBox:addEventListener("tap", muteBgmButton)
 ----------------------------------------------------------------------------------------
-    local widget = require("widget")
+  --[[  local widget = require("widget")
 
     -- Create the widget
     local slider = widget.newSlider(
@@ -169,10 +182,10 @@ local function menuClicked() --When menu is clicked
             value = bgVolume,  -- Start slider at bgVolume
         }
     )
-    --not working yet
+    --not working yet --]]
 ----------------------------------------------------------------------------------------
     local function backToStart() --goes back to starting screen
-        continueButton.isVisible = true
+        --continueButton.isVisible = true
         newButton.isVisible = true
         menuButton.isVisible = true
         backButtonMenu.isVisible = false
@@ -180,7 +193,9 @@ local function menuClicked() --When menu is clicked
         soundText.isVisible = false
         soundOnBox:removeSelf()
         soundOffBox:removeSelf()
-        slider:removeSelf()
+        --slider:removeSelf()
+        background.isVisible = true
+        backgroundtwo.isVisible = false
     end
     backButtonMenu:addEventListener("tap", backToStart) --points to the function above
 end
@@ -188,21 +203,23 @@ menuButton:addEventListener("tap", menuClicked) --points to the function that tr
 
 -- NEW GAME PRESSED --
 local chooseClass = display.newText( uiGroup,"Choose Your Class!", display.contentCenterX, display.contentCenterY - 300, native.systemFont, 80  )
-    chooseClass:setFillColor(255, 0, 255) --Declaring the text, Lua uses RGB Colours
+    chooseClass:setFillColor(139 / 255, 69 / 255, 19 / 255) --Declaring the text, Lua uses RGB Colours
     chooseClass.isVisible = false
 
-local mageIcon = display.newImageRect(uiGroup, "Badge_mage.png", 500, 500) --declaring the mage image
+local mageIcon = display.newImageRect(uiGroup, "Badge_barbarian.png", 500, 500) --declaring the mage image
     mageIcon.x = display.contentCenterX
     mageIcon.y = display.contentCenterY
     mageIcon.isVisible = false
 
-local mageIconHover = display.newImageRect(uiGroup, "Badge_mage.png", 550, 550) --declaring the bigger mage image
+local mageIconHover = display.newImageRect(uiGroup, "Badge_barbarian.png", 550, 550) --declaring the bigger mage image
     mageIconHover.x = display.contentCenterX
     mageIconHover.y = display.contentCenterY
     mageIconHover.isVisible = false
 
 local function newButton_tap() --goes to new game options
-    continueButton.isVisible = false
+    background.isVisible = false
+    backgroundthree.isVisible = true
+    --continueButton.isVisible = false
     newButton.isVisible = false
     newButtonLight.isVisible = false
     menuButton.isVisible = false
@@ -237,7 +254,9 @@ local function newButton_tap() --goes to new game options
      backButtonNew:addEventListener("mouseHover", onMouseHoverBack) --Points to the function above
 
     local function backToStart() --goes back to the start screen
-        continueButton.isVisible = true
+        background.isVisible = true
+        backgroundthree.isVisible = false
+        --continueButton.isVisible = true
         newButton.isVisible = true
         menuButton.isVisible = true
         backButtonNew.isVisible = false
@@ -265,75 +284,49 @@ local function mageIconClicked() --when the mage is clicked start new game
 local blueCollision = { groupIndex = 1 }
 
 -- Image Sheets and Sequences --
-local mageSheetOptions=
+local minotaurSheetOptions=
 {
   -- Required parameters
-    width = 72,
-    height = 72,
-    numFrames = 25,
+    width = 118,
+    height = 90,
+    numFrames = 8,
 }
-local mageSheet = graphics.newImageSheet("mageSpriteSheet.png", mageSheetOptions)
+local minotaurSheet = graphics.newImageSheet("minotaurSpriteSheet.png", minotaurSheetOptions)
 
-local sequences_runningMage = {
+local minotaurSheetOptions=
+{
+  -- Required parameters
+    width = 64,
+    height = 64,
+    numFrames = 6,
+}
+local ghostSheet = graphics.newImageSheet("ghostSpriteSheet.png", minotaurSheetOptions)
+
+local sequences_runningMinotaur = {
     -- consecutive frames sequence
     {
         name = "everything",
         start = 1,
-        count = 25,
+        count = 8,
         time = 400,
         loopCount = 0,
         loopDirection = "forward"
     },
-    {
-        name = "leftRun",
-        frames = { 21,22,23 },
-        time = 400,
-        loopCount = 0
-    },
-    {
-      name = "rightRun",
-      frames = { 16,17,18 },
-      time = 400,
-      loopCount = 0
-    },
-    {
-      name = "upRun",
-      frames = { 4,5 },
-      time = 400,
-      loopCount = 0
-    },
-    {
-      name = "downRun",
-      frames = { 1,2,3 },
-      time = 400,
-      loopCount = 0
-    },
-    {
-      name = "upLeftRun",
-      frames = { 1,2,3 },
-      time = 400,
-      loopCount = 0
-    },
-    {
-      name = "upRightRun",
-      frames = { 1,2,3 },
-      time = 400,
-      loopCount = 0
-    },
-    {
-      name = "downLeftRun",
-      frames = { 1,2,3 },
-      time = 400,
-      loopCount = 0
-    },
-    {
-      name = "downRightRun",
-      frames = { 1,2,3 },
-      time = 400,
-      loopCount = 0
-    }
 }
-local mageRun = display.newSprite(mainGroup, mageSheet, sequences_runningMage)
+local minotaurRun = display.newSprite(mainGroup, minotaurSheet, sequences_runningMinotaur)
+
+local sequences_runningGhost = {
+    -- consecutive frames sequence
+    {
+        name = "everything",
+        start = 1,
+        count = 6,
+        time = 400,
+        loopCount = 0,
+        loopDirection = "forward"
+    },
+}
+local ghostRun = display.newSprite(mainGroup, ghostSheet, sequences_runningGhost)
 
     -- GAME PHYSICS --
     local physics = require("physics")
@@ -348,7 +341,7 @@ local mageRun = display.newSprite(mainGroup, mageSheet, sequences_runningMage)
     local mapLevel = 0
 
     -- PLAYER PHYSICS --
-    local player = mageRun -- (72x72)pixels per box to have 400 positions on the map. 20per row.
+    local player = minotaurRun -- (72x72)pixels per box to have 400 positions on the map. 20per row.
     player.x = 190
     player.y = 180
     physics.addBody( player, "dynamic",{density =5000})
@@ -360,13 +353,13 @@ local mageRun = display.newSprite(mainGroup, mageSheet, sequences_runningMage)
     player:setLinearVelocity(Vx,Vy)
 
     -- wall physics --
-    local Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
+    local Walls = display.newImageRect( mainGroup,"Walls.png", 72, 72)
     Walls.x = 36
     Walls.y =36
     physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
 
     local function addWall(coordinateX, coordinateY) --adding a function to make adding a wall easier
-        Walls = display.newImageRect( mainGroup,"Walls.jpg", 72, 72)
+        Walls = display.newImageRect( mainGroup,"Walls.png", 72, 72)
         Walls.x = coordinateX
         Walls.y = coordinateY
         physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
@@ -403,15 +396,12 @@ local mageRun = display.newSprite(mainGroup, mageSheet, sequences_runningMage)
       end
 addWallsLine( 36, 1872 + 36, 1044, 1044) -- bottom, working now, for loops are different than in java, notice the middle part
 addWallsLine( 72+36, 1872 + 36, 36, 36) --top
-addWallsLine( 36, 36, 36+72, 504 + 36 -72 ) --left up
 local breakableWall = display.newImageRect( mainGroup,"breakableWall.png", 72, 72)
-breakableWall.x = 36
+breakableWall.x = 200
 breakableWall.y =542.5
 physics.addBody( breakableWall, "static", {bounce = 0.0, friction = 50, density = 150, filter = blueCollision} )
-addWallsLine( 36, 36, 616, 976 ) --left down
+addWallsLine( 36, 36, 40, 976) --left down
 addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
-addWall(300,800)
-addWall(700,900)
 Walls.type = "wall"
 
   -- UI --               -- Health Bar , Armor, Mana , Items
@@ -462,12 +452,12 @@ end
   addMana(500,1045)
 
     -- enemy --
-  local enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
-    enemy.isVisible = false
+  local enemy
   local function addEnemy (coordinateX, coordinateY, Ex, Ey)
-    enemy = display.newImageRect(mainGroup, "Enemy.jpg", 72, 72)
+    enemy = ghostRun
     enemy.x = coordinateX
     enemy.y = coordinateY
+    enemy:play()
     physics.addBody( enemy, "dynamic",{density =0, bounce =1})
     enemy.type = "enemy"
     enemy.isFixedRotation=true
@@ -509,15 +499,16 @@ end
       timer.performWithDelay(500, EnemyAttack)
       if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 2500 then break end
     end
-    if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 1250 then
-      for i=0, 10, i+1 do
-        timer.performWithDelay(420, EnemyAttack)
-        if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 1250 then break end
+      if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 1250 then
+        for i=0, 10, i+1 do
+          timer.performWithDelay(420, EnemyAttack)
+          if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 1250 then break end
+        end
       end
     end
   end
-end
 
+  local Right = true
   local  randomMovementEnemy = function() --endless loop for generating random number for enemy to change movements
     local minus1 =1
     local minus2 =1
@@ -526,7 +517,14 @@ end
     local Ex = ((math.random() *200) +50) *minus1
     local Ey = ((math.random() *200) +50) *minus2
     enemy:setLinearVelocity(Ex,Ey)
-  end
+    if (enemy.x < player.x) and (Right == false) then
+        enemy:scale(-1,1)
+        Right = true
+      elseif (enemy.x > player.x) and (Right == true) then
+        enemy:scale(-1,1)
+        Right = false
+      end
+    end
     timer.performWithDelay( 1000, randomMovementEnemy, -1)
 
     -- background --       -- block this with walls to make it seem like the floor --
@@ -535,64 +533,103 @@ end
     floor.y = display.contentCenterY
 
     -- movement wasd --
-    local previousLeft = 2
-    local previousRight = 2
+    local pLeft = 0
+    local pRight = 1
+    local moving = 0
+    local rDown = false
+    local lDown = false
+    local uDown = false
+    local dDown = false
 
     local function onKeyEvent(event)   -- movement commands --  sets Vx and Vy independently, allowing fluid movement
     if event.keyName == "a" then
        if event.phase == "down" then
          Vx = Vx - 200
          player:setLinearVelocity(Vx,Vy)
-         player:setSequence( "leftRun" )
+         if pRight == 1 then
+           player:scale(-1,1)
+           pRight = 0
+           pLeft = 1
+         end
          player:play()
+         moving = moving +1
+         lDown = true
         elseif event.phase == "up" then
           Vx = Vx + 200
           player:setLinearVelocity(Vx,Vy)
-          player:setSequence( "everything" )
-          player:pause()
-          player:setFrame(1)
+          if moving-1 == 0 then
+            if uDown == false and dDown == false and rDown == false then
+              player:pause()
+              player:setFrame(1)
+            end
+          end
+          moving = moving -1
+          lDown = false
        end
     end
     if event.keyName == "d" then
        if event.phase == "down" then
          Vx = Vx + 200
          player:setLinearVelocity(Vx,Vy)
-         player:setSequence( "rightRun" )
+         if pLeft == 1 then
+           player:scale(-1,1)
+           pLeft = 0
+           pRight = 1
+         end
          player:play()
+         moving = moving +1
+         rDown = true
         elseif event.phase == "up" then
           Vx = Vx - 200
           player:setLinearVelocity(Vx,Vy)
-          player:setSequence( "everything" )
-          player:pause()
-          player:setFrame(1)
+          if moving-1 == 0 then
+            if uDown == false and dDown == false and lDown == false then
+              player:pause()
+              player:setFrame(1)
+            end
+          end
+          moving = moving -1
+          rDown = false
        end
     end
     if event.keyName == "w" then
        if event.phase == "down" then
          Vy = Vy-200
          player:setLinearVelocity(Vx,Vy)
-         player:setSequence( "upRun" )
          player:play()
+         moving = moving +1
+         uDown = true
         elseif event.phase == "up" then
           Vy = Vy + 200
           player:setLinearVelocity(Vx,Vy)
-          player:setSequence( "everything" )
-          player:pause()
-          player:setFrame(1)
+          if moving-1 == 0 then
+            if rDown == false and lDown == false and dDown == false then
+              player:pause()
+              player:setFrame(1)
+            end
+          end
+          moving = moving -1
+          uDown = false
        end
     end
     if event.keyName == "s" then
        if event.phase == "down" then
          Vy = Vy + 200
          player:setLinearVelocity(Vx,Vy)
-         player:setSequence( "downRun" )
          player:play()
+         moving = moving +1
+         dDown = true
         elseif event.phase == "up" then
           Vy = Vy - 200
           player:setLinearVelocity(Vx,Vy)
-          player:setSequence( "everything" )
-          player:pause()
-          player:setFrame(1)
+          if moving-1 == 0 then
+            if rDown == false and lDown == false and uDown == false then
+              player:pause()
+              player:setFrame(1)
+            end
+          end
+          moving = moving -1
+          dDown = false
        end
     end
   end
@@ -667,7 +704,7 @@ end
       display.remove (event.other)
       event.other = nil
     end]]
-    if(event.target.type=="player" and event.other.type=="ShittyNutrients") then
+    if(event.target.type=="player" and event.other.type=="ShittyNutrients") then --who coded this abomination? -Jakub
       if event.phase == "began" then
       local oof = audio.play(enemyHit)
       if reee==1 then
@@ -697,25 +734,12 @@ end
         gameOver.y = 1080/2
         enemy.isVisible = false
         player.isVisible = false
+        Runtime:removeEventListener("mouse", proteinProjectile)
 
 
       end
     end
     end
-
-  --[[local function onLocalCollision( self, event )   -- Protein Projectile detection function
-    local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
-    if(event.target.type=="enemy" and event.other.type=="protein") then       --Makes sure its protein which is hitting it.
-      if event.phase == "began" then
-        local oof = audio.play(enemyHit)
-      end
-    end
-    if(event.target.type=="player" and event.other.type=="ShittyNutrients") then
-      if event.phase == "began" then
-        local oof = audio.play(enemyHit)
-      end
-    end
-  end]]
 
   enemy.collision = onLocalCollision
   enemy:addEventListener( "collision" ) --Checks if enemy has been hit by anything.

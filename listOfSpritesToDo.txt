@@ -1,6 +1,0 @@
-walls
-projectiles
-destroyable wall
-enemies
-final boss
-game background
