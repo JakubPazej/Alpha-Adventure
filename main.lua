@@ -9,7 +9,7 @@ local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 -- Sounds & Music --
 local backgroundMusic = audio.loadStream("28_爱给网_aigei_com .mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
-local bgVolume = 0--.15--.15
+local bgVolume = 0.15--.15
 audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to bgVolume
 audio.setVolume(bgVolume)
 
@@ -502,28 +502,12 @@ Walls5.type = "wall"]]
   addHeart(150,1045)
   addHeart(200,1045)]]
   local Heart1 = display.newImageRect(mainGroup,"Heart.png",72,72)
-  local Heart2 = display.newImageRect(mainGroup,"Heart.png",72,72)
-  local Heart3 = display.newImageRect(mainGroup,"Heart.png",72,72)
   Heart1.x = 100
-  Heart2.x = 150
-  Heart3.x = 200
   Heart1.y = 1045
-  Heart2.y = 1045
-  Heart3.y = 1045
   Heart1.isVisible = true
-  Heart2.isVisible = true
-  Heart3.isVisible = true
-  local emptyHeart1 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
-  local emptyHeart2 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
   local emptyHeart3 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
-  emptyHeart1.x = 200
-  emptyHeart2.x = 150
   emptyHeart3.x = 100
-  emptyHeart1.y = 1045
-  emptyHeart2.y = 1045
   emptyHeart3.y = 1045
-  emptyHeart1.isVisible = false
-  emptyHeart2.isVisible = false
   emptyHeart3.isVisible = false
 
 function getHit(event)
@@ -804,27 +788,6 @@ end
     if(event.target.type=="player" and event.other.type=="ShittyNutrients") then --who coded this abomination? -Jakub
       if event.phase == "began" then
         local oof = audio.play(enemyHit)
-        if reee==1 then
-          Heart3.isVisible = false
-          emptyHeart1.isVisible = true
-          emptyHeart1.x = 200
-          emptyHeart1.y = 1045
-          reee = reee +1
-          display.remove(event.other)
-          event.other= nil
-
-        end
-        elseif reee == 2 then
-          Heart2.isVisible = false
-          emptyHeart2.isVisible = true
-          emptyHeart2.x = 150
-          emptyHeart2.y = 1045
-          reee = reee +1
-          display.remove(event.other)
-          event.other= nil
-
-        end
-        elseif reee == 3 then
           display.remove(event.other)
           event.other= nil
           Heart1.isVisible = false
@@ -840,6 +803,7 @@ end
 
           Runtime:removeEventListener("mouse", proteinProjectile)
       end
+    end
     end
 
   enemy.collision = onLocalCollision
