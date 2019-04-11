@@ -493,20 +493,29 @@ end
 
 --If the player gets too close the enemy will fire projectiles at them.
 --The close the player is to an enemy the higher the rate of fire.
-  function EnemyDetectRange(event)
-    if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 2500 then
-      for i=0, 10, i+1 do
-      timer.performWithDelay(500, EnemyAttack)
-      if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 2500 then break end
-    end
-      if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 1250 then
+  function EnemyDetectRange(self, event)
+    if event.target.type == "enemy" and event.other.type == "player" then
+      if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 2500 then
         for i=0, 10, i+1 do
-          timer.performWithDelay(420, EnemyAttack)
-          if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 1250 then break end
+          timer.performWithDelay(500, EnemyAttack)
+          if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 2500 then
+            break
+          end
+        end
+        if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 1250 then
+          for i=0, 10, i+1 do
+            timer.performWithDelay(420, EnemyAttack)
+            if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) > 1250 then
+              break
+            end
+          end
         end
       end
     end
   end
+
+
+
 
   local Right = true
   local  randomMovementEnemy = function() --endless loop for generating random number for enemy to change movements
@@ -665,8 +674,8 @@ end
   end
 end
 
-
-    Runtime:addEventListener("preCollision", EnemyDetectRange)
+    enemy.preCollision = EnemyDetectRange
+    enemy:addEventListener("preCollision")
     Runtime:addEventListener("key", onKeyEvent)
     Runtime:addEventListener("mouse", proteinProjectile)
     timer.performWithDelay( 1000, randomMovementEnemy, -1)
