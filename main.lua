@@ -9,7 +9,7 @@ local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 -- Sounds & Music --
 local backgroundMusic = audio.loadStream("28_爱给网_aigei_com .mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
-local bgVolume = 0.15--.15
+local bgVolume = 0--.15--.15
 audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to bgVolume
 audio.setVolume(bgVolume)
 
@@ -342,7 +342,7 @@ local ghostRun = display.newSprite(mainGroup, ghostSheet, sequences_runningGhost
 
     -- PLAYER PHYSICS --
     local player = minotaurRun -- (72x72)pixels per box to have 400 positions on the map. 20per row.
-    player.x = 190
+    player.x = 1000
     player.y = 180
     physics.addBody( player, "dynamic",{density =5000})
     player.isFixedRotation=true
@@ -361,6 +361,8 @@ local ghostRun = display.newSprite(mainGroup, ghostSheet, sequences_runningGhost
     Door = display.newImageRect( mainGroup,"door.png", 72, 108)
     Door.x = 576
     Door.y = 144 +36
+    physics.addBody( Door, "static", {bounce = 0.0, friction = 50, density = 150} )
+    Door.type = "door"
 
     local function addWall(coordinateX, coordinateY) --adding a function to make adding a wall easier
         Walls = display.newImageRect( mainGroup,"Walls.png", 72, 72)
@@ -542,7 +544,7 @@ Walls24.type = "wall"
   addHeart(150,1045)
   addHeart(200,1045)]]
   local Heart1 = display.newImageRect(mainGroup,"Heart.png",72,72)
-  Heart1.x = 100
+  Heart1.x = 110
   Heart1.y = 1045
   Heart1.isVisible = true
   local emptyHeart3 = display.newImageRect(mainGroup,"EmptyHeart.png",72,72)
@@ -558,9 +560,7 @@ end
     fullMana.y = Y
   end
   local playerLives = 3
-  addMana(400,1045)
-  addMana(450,1045)
-  addMana(500,1045)
+
 
     -- enemy --
   local enemy
@@ -966,12 +966,12 @@ local en = 0
           end
         end
       end
-    end
+
     --[[if(event.target.type == "wall" and event.other.type == "protein") then
       display.remove (event.other)
       event.other = nil
     end]]
-    if(event.target.type=="player" and event.other.type=="ShittyNutrients") then --who coded this abomination? -Jakub
+    elseif(event.target.type=="player" and event.other.type=="ShittyNutrients") then --who coded this abomination? -Jakub
       if event.phase == "began" then
         local oof = audio.play(enemyHit)
           display.remove(event.other)
@@ -989,8 +989,42 @@ local en = 0
 
           Runtime:removeEventListener("mouse", proteinProjectile)
       end
-    end
+
+  elseif(event.target.type=="player" and event.other.type=="door") then
+    enemy.isVisible = false
+    display.remove(Walls1)
+    display.remove(Walls2)
+    display.remove(Walls3)
+    display.remove(Walls4)
+    display.remove(Walls5)
+    display.remove(Walls6)
+    display.remove(Walls7)
+    display.remove(Walls8)
+    display.remove(Walls9)
+    display.remove(Walls10)
+    display.remove(Walls11)
+    display.remove(Walls12)
+    display.remove(Walls13)
+    display.remove(Walls14)
+    display.remove(Walls15)
+    display.remove(Walls16)
+    display.remove(Walls17)
+    display.remove(Walls18)
+    display.remove(Walls19)
+    display.remove(Walls20)
+    display.remove(Walls21)
+    display.remove(Walls22)
+    display.remove(Walls23)
+    display.remove(Walls24)
+    display.remove(Door)
+    enemy.isVisible = false
+    transition.to(player, {x=1920/2,y=950, time = 1})
+
+
+
+
   end
+end
 
   enemy.collision = onLocalCollision
   enemy:addEventListener( "collision" ) --Checks if enemy has been hit by anything.
