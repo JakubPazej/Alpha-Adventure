@@ -9,7 +9,7 @@ local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 -- Sounds & Music --
 local backgroundMusic = audio.loadStream("28_爱给网_aigei_com .mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
-local bgVolume = 0.15--.15
+local bgVolume = 0--.15--.15
 audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to bgVolume
 audio.setVolume(bgVolume)
 
@@ -358,6 +358,10 @@ local ghostRun = display.newSprite(mainGroup, ghostSheet, sequences_runningGhost
     Walls.y =36
     physics.addBody( Walls, "static", {bounce = 0.0, friction = 50, density = 150} )
 
+    Door = display.newImageRect( mainGroup,"door.png", 72, 108)
+    Door.x = 576
+    Door.y = 144 +36
+
     local function addWall(coordinateX, coordinateY) --adding a function to make adding a wall easier
         Walls = display.newImageRect( mainGroup,"Walls.png", 72, 72)
         Walls.x = coordinateX
@@ -396,9 +400,9 @@ local ghostRun = display.newSprite(mainGroup, ghostSheet, sequences_runningGhost
       end
 addWallsLine( 36, 1872 + 36, 1044, 1044) -- bottom, working now, for loops are different than in java, notice the middle part
 addWallsLine( 72+36, 1872 + 36, 36, 36) --top
-local breakableWall = display.newImageRect( mainGroup,"breakableWall.png", 72, 72)
-breakableWall.x = 200
-breakableWall.y =542.5
+local breakableWall = display.newImageRect( mainGroup,"breakableWall.png", 144+72, 144+72)
+breakableWall.x = 576+144+72
+breakableWall.y = 144+36
 physics.addBody( breakableWall, "static", {bounce = 0.0, friction = 50, density = 150, filter = blueCollision} )
 addWallsLine( 36, 36, 40, 976) --left down
 addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
@@ -420,76 +424,111 @@ Walls3.x = 360 + 72
 Walls3.y =288 +72
 physics.addBody( Walls3, "static", {bounce = 0.0, friction = 50, density = 150} )
 Walls3.type = "wall"
-local Walls3 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
-Walls3.x = 144
-Walls3.y =504
-physics.addBody( Walls3, "static", {bounce = 0.0, friction = 50, density = 150} )
-Walls3.type = "wall"
---[[local Walls4 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
-Walls4.x = 36
-Walls4.y =36
+local Walls4 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls4.x = 144
+Walls4.y =504 +72
 physics.addBody( Walls4, "static", {bounce = 0.0, friction = 50, density = 150} )
 Walls4.type = "wall"
+local Walls6 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls6.x = 360 +144+72
+Walls6.y =288+72
+physics.addBody( Walls6, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls6.type = "wall"
 local Walls5 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
-Walls5.x = 36
-Walls5.y =36
+Walls5.x = 720
+Walls5.y =288+72
 physics.addBody( Walls5, "static", {bounce = 0.0, friction = 50, density = 150} )
-Walls5.type = "wall"]]
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Walls5.type = "wall"
+local Walls7 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls7.x = 720+72
+Walls7.y =288+72
+physics.addBody( Walls7, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls7.type = "wall"
+local Walls8 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls8.x = 720+144
+Walls8.y =288+72
+physics.addBody( Walls8, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls8.type = "wall"
+local Walls9 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls9.x = 720
+Walls9.y =288+144+72
+physics.addBody( Walls9, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls9.type = "wall"
+local Walls10 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls10.x = 720
+Walls10.y =612
+physics.addBody( Walls10, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls10.type = "wall"
+local Walls11 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls11.x = 720 -144
+Walls11.y =612
+physics.addBody( Walls11, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls11.type = "wall"
+local Walls12 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls12.x = 720-144
+Walls12.y =612+144
+physics.addBody( Walls12, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls12.type = "wall"
+local Walls13 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls13.x = 720+144
+Walls13.y =612+144+144+36
+physics.addBody( Walls13, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls13.type = "wall"
+local Walls14 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls14.x = 720+144
+Walls14.y =612
+physics.addBody( Walls14, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls14.type = "wall"
+local Walls15 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls15.x = 720+144+144
+Walls15.y =612
+physics.addBody( Walls15, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls15.type = "wall"
+local Walls16 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls16.x = 720+288+144
+Walls16.y =612
+physics.addBody( Walls16, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls16.type = "wall"
+local Walls17 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls17.x = 720+288+288
+Walls17.y =612
+physics.addBody( Walls17, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls17.type = "wall"
+local Walls18 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls18.x = 720+288+288+144
+Walls18.y =612
+physics.addBody( Walls18, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls18.type = "wall"
+local Walls19 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls19.x = 720+288+144+36
+Walls19.y =612+144
+physics.addBody( Walls19, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls19.type = "wall"
+local Walls20 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls20.x = 720+288+288+288+144+48
+Walls20.y =612+144+36
+physics.addBody( Walls20, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls20.type = "wall"
+local Walls21 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls21.x = 720+288+288+144+36
+Walls21.y =612+144+144+36
+physics.addBody( Walls21, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls21.type = "wall"
+local Walls22 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls22.x = 720+288+288+144
+Walls22.y =612-144
+physics.addBody( Walls22, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls22.type = "wall"
+local Walls23 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls23.x = 720+288+288+144
+Walls23.y =612-288
+physics.addBody( Walls23, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls23.type = "wall"
+local Walls24 = display.newImageRect( mainGroup,"Walls.png", 144, 144)
+Walls24.x = 720+288+288
+Walls24.y =612-288
+physics.addBody( Walls24, "static", {bounce = 0.0, friction = 50, density = 150} )
+Walls24.type = "wall"
 
   -- UI --               -- Health Bar , Armor, Mana , Items
 --[[  local function addHeart(X, Y) --adding a function to make adding a wall easier
@@ -561,10 +600,11 @@ end
         transition.to(ShittyNutrients, {x=EX,y=EY,time=Math2/0.002})
       end
     end
+    timer.performWithDelay( 1000, EnemyAttack, -1)
 
 --If the player gets too close the enemy will fire projectiles at them.
 --The close the player is to an enemy the higher the rate of fire.
-  function EnemyDetectRange(self, event)
+  --[[function EnemyDetectRange(self, event)
     if event.target.type == "enemy" and event.other.type == "player" then
       if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 10500 then
         for i=0, 10, i+1 do
@@ -583,7 +623,7 @@ end
         end
       end
     end
-  end
+  end]]
 
 
 
@@ -745,8 +785,8 @@ end
   end
 end
 
-    enemy.preCollision = EnemyDetectRange
-    enemy:addEventListener("preCollision")
+    --enemy.preCollision = EnemyDetectRange
+    --enemy:addEventListener("preCollision")
     Runtime:addEventListener("key", onKeyEvent)
     Runtime:addEventListener("mouse", proteinProjectile)
     timer.performWithDelay( 1000, randomMovementEnemy, -1)
@@ -759,17 +799,78 @@ end
   breakableWall:addEventListener("collision")
 
 
-  local function wallCollision( event )
-      if  (event.target.type == "wall" and event.other.type == "protein") then
-        if event.phase =="began" then
-        display.remove(event.other)
-        event.other= nil
+    function wallCollision( event )
+      if event.phase =="began" then
+      if  (event.target.type == "wall" and (event.other.type == "ShittyNutrients" or "protein")) then
+
+          display.remove(event.other)
+          event.other= nil
+        end
       end
     end
-  end
+      --[[else
+        if  (event.target.type == "wall" and event.other.type == "protein") then
+          if event.phase =="began" then
+            display.remove(event.other)
+            event.other= nil
+          end
+        end
+      end]]
+
+
+
   --  Walls.collision = wallCollision
     --Walls:addEventListener("collision")
-    Walls3:addEventListener("collision", wallCollision)
+    --[[Walls1:addEventListener("collision", wallCollision2)
+      Walls2:addEventListener("collision", wallCollision2)
+        Walls3:addEventListener("collision", wallCollision2)
+          Walls4:addEventListener("collision", wallCollision2)
+            Walls5:addEventListener("collision", wallCollision2)
+              Walls6:addEventListener("collision", wallCollision2)
+                Walls7:addEventListener("collision", wallCollision2)
+                  Walls8:addEventListener("collision", wallCollision2)
+                    Walls9:addEventListener("collision", wallCollision2)
+                      Walls10:addEventListener("collision", wallCollision2)
+                        Walls11:addEventListener("collision", wallCollision2)
+                          Walls12:addEventListener("collision", wallCollision2)
+                            Walls13:addEventListener("collision", wallCollision2)
+                              Walls14:addEventListener("collision", wallCollision2)
+                                Walls15:addEventListener("collision", wallCollision2)
+                                  Walls16:addEventListener("collision", wallCollision2)
+                                    Walls17:addEventListener("collision", wallCollision2)
+                                      Walls18:addEventListener("collision", wallCollision2)
+                                        Walls19:addEventListener("collision", wallCollision2)
+                                          Walls20:addEventListener("collision", wallCollision2)
+                                            Walls21:addEventListener("collision", wallCollision2)
+                                              Walls22:addEventListener("collision", wallCollision2)
+                                                Walls23:addEventListener("collision", wallCollision2)
+                                                  Walls24:addEventListener("collision", wallCollision2)]]
+    Walls1:addEventListener("collision", wallCollision)
+      Walls2:addEventListener("collision", wallCollision)
+        Walls3:addEventListener("collision", wallCollision)
+          Walls4:addEventListener("collision", wallCollision)
+            Walls5:addEventListener("collision", wallCollision)
+              Walls6:addEventListener("collision", wallCollision)
+                Walls7:addEventListener("collision", wallCollision)
+                  Walls8:addEventListener("collision", wallCollision)
+                    Walls9:addEventListener("collision", wallCollision)
+                      Walls10:addEventListener("collision", wallCollision)
+                        Walls11:addEventListener("collision", wallCollision)
+                          Walls12:addEventListener("collision", wallCollision)
+                            Walls13:addEventListener("collision", wallCollision)
+                              Walls14:addEventListener("collision", wallCollision)
+                                Walls15:addEventListener("collision", wallCollision)
+                                  Walls16:addEventListener("collision", wallCollision)
+                                    Walls17:addEventListener("collision", wallCollision)
+                                      Walls18:addEventListener("collision", wallCollision)
+                                        Walls19:addEventListener("collision", wallCollision)
+                                          Walls20:addEventListener("collision", wallCollision)
+                                            Walls21:addEventListener("collision", wallCollision)
+                                              Walls22:addEventListener("collision", wallCollision)
+                                                Walls23:addEventListener("collision", wallCollision)
+                                                  Walls24:addEventListener("collision", wallCollision)
+
+
 
   local function onLocalCollision( self, event )      -- Protein Projectile detection function
     local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
