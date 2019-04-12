@@ -9,7 +9,7 @@ local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 -- Sounds & Music --
 local backgroundMusic = audio.loadStream("28_爱给网_aigei_com .mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
-local bgVolume = 0--.15--.15
+local bgVolume = 0.15--.15
 audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to bgVolume
 audio.setVolume(bgVolume)
 
@@ -342,7 +342,7 @@ local ghostRun = display.newSprite(mainGroup, ghostSheet, sequences_runningGhost
 
     -- PLAYER PHYSICS --
     local player = minotaurRun -- (72x72)pixels per box to have 400 positions on the map. 20per row.
-    player.x = 1000--190
+    player.x = 190
     player.y = 180
     physics.addBody( player, "dynamic",{density =5000})
     player.isFixedRotation=true
@@ -601,11 +601,11 @@ end
         transition.to(ShittyNutrients, {x=EX,y=EY,time=Math2/0.002})
       end
     end
-    timer.performWithDelay( 1000, EnemyAttack, -1)
+    --timer.performWithDelay( 1000, EnemyAttack, -1)
 
 --If the player gets too close the enemy will fire projectiles at them.
 --The close the player is to an enemy the higher the rate of fire.
-  --[[function EnemyDetectRange(self, event)
+  function EnemyDetectRange(self, event)
     if event.target.type == "enemy" and event.other.type == "player" then
       if math.sqrt(math.pow((enemy.x - player.x),2) + math.pow((enemy.y - player.y),2 )) < 10500 then
         for i=0, 10, i+1 do
@@ -624,8 +624,7 @@ end
         end
       end
     end
-  end]]
-
+  end
 
 
 
@@ -646,7 +645,56 @@ end
         Right = false
       end
     end
+  --  timer.performWithDelay( 1000, randomMovementEnemy, -1)
+
+  --[[  local en = 0
+    enemy = ghostRun
+    enemy.x = 500
+    enemy.y = 500
+    enemy:play()
+    physics.addBody( enemy, "dynamic",{density =0, bounce =1})
+    enemy.type = "enemy"
+    enemy.isFixedRotation=true
+    player.isBullet = false
+    enemy:setLinearVelocity(0,0)
+    function EnemyAttack(event)
+      if enemy.isVisible == true then
+        local ShittyNutrients = display.newImageRect(mainGroup,"Protein.png", 40, 40)
+        local Math2
+        ShittyNutrients.isVisible = true
+        ShittyNutrients.isBullet = true
+        ShittyNutrients.type = "ShittyNutrients"
+        ShittyNutrients.x = enemy.x
+        ShittyNutrients.y = enemy.y
+        physics.addBody(ShittyNutrients, "dynamic", {filter=blueCollision})
+        ShittyNutrients.isSensor = true
+        ShittyNutrients.isFixedRotation = false
+        Math1 = math.sqrt(math.pow((player.x - enemy.x),2) + math.pow((player.y - enemy.y),2 ))
+          local EX = scaleUpPoint(enemy.x, player.x, 1.01, 1)
+          local EY = scaleUpPoint(enemy.y, player.y, 1.01, 1)
+          transition.to(ShittyNutrients, {x=EX,y=EY,time=Math1/0.002})
+        end
+      end
+      local Right = true
+      local  randomMovementEnemy = function() --endless loop for generating random number for enemy to change movements
+        local minus1 =1
+        local minus2 =1
+        if math.random() > 0.5 then minus1 = -1 end
+        if math.random() > 0.5 then minus2 = -1 end
+        local Ex = ((math.random() *200) +50) *minus1
+        local Ey = ((math.random() *200) +50) *minus2
+        enemy:setLinearVelocity(Ex,Ey)
+        if (enemy.x < player.x) and (Right == false) then
+            enemy:scale(-1,1)
+            Right = true
+          elseif (enemy.x > player.x) and (Right == true) then
+            enemy:scale(-1,1)
+            Right = false
+          end
+        end]]
+
     timer.performWithDelay( 1000, randomMovementEnemy, -1)
+    timer.performWithDelay( 1000, EnemyAttack, -1)
 
     -- background --       -- block this with walls to make it seem like the floor --
     local floor = display.newImageRect( uiGroup, "floor.jpg", 1920, 1080 ) -- declaring continue button
@@ -882,14 +930,40 @@ end
                                                   Walls24:addEventListener("collision", wallCollision)
 
 
-
+local en = 0
   local function onLocalCollision( self, event )      -- Protein Projectile detection function
     local enemyHit = audio.loadSound("oof.mp3")       -- Loads enemy hurting sound
     if(event.target.type=="enemy" and event.other.type=="protein") then       --Makes sure its protein which is hitting it.
       if event.phase == "began" then
         if enemy.isVisible == true then
-          local oof = audio.play(enemyHit)
-          enemy.isVisible = false
+          if en == 0 then
+            local oof = audio.play(enemyHit)
+            transition.to(enemy, {x=144,y=684, time = 1})--144,684
+            en = 1
+
+          elseif en == 1 then
+            local oof = audio.play(enemyHit)
+            transition.to(enemy, {x=744,y=750, time = 1})
+            en = 2
+
+          elseif en == 2 then
+            local oof = audio.play(enemyHit)
+            transition.to(enemy, {x=1544,y=750, time = 1})
+            en = 3
+
+          elseif en == 3 then
+            local oof = audio.play(enemyHit)
+            transition.to(enemy, {x=1544,y=144, time = 1})
+            en = 4
+
+          elseif en == 4 then
+            local oof = audio.play(enemyHit)
+            transition.to(enemy, {x=1000,y=450, time = 1})
+            en = 5
+          elseif en == 5 then
+            local oof = audio.play(enemyHit)
+            enemy.isVisible = false
+          end
         end
       end
     end
@@ -916,7 +990,7 @@ end
           Runtime:removeEventListener("mouse", proteinProjectile)
       end
     end
-    end
+  end
 
   enemy.collision = onLocalCollision
   enemy:addEventListener( "collision" ) --Checks if enemy has been hit by anything.
