@@ -9,7 +9,7 @@ local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 -- Sounds & Music --
 local backgroundMusic = audio.loadStream("28_爱给网_aigei_com .mp3") --loads music in small chunks to save memory
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
-local bgVolume = 0--.15--.15
+local bgVolume = 0.15--.15
 audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to bgVolume
 audio.setVolume(bgVolume)
 
@@ -339,6 +339,7 @@ local ghostRun = display.newSprite(mainGroup, ghostSheet, sequences_runningGhost
     local experience = 0
     local playerLevel = 0
     local mapLevel = 0
+    local ouch = 0                --For Lord Battle
 
     -- PLAYER PHYSICS --
     local player = minotaurRun -- (72x72)pixels per box to have 400 positions on the map. 20per row.
@@ -363,6 +364,10 @@ local ghostRun = display.newSprite(mainGroup, ghostSheet, sequences_runningGhost
     Door.y = 144 +36
     physics.addBody( Door, "static", {bounce = 0.0, friction = 50, density = 150} )
     Door.type = "door"
+    local Lord = display.newImageRect(mainGroup,"lord.png", 288, 288)
+    Lord.isVisible = false
+    physics.addBody( Door, "static", {bounce = 0.0, friction = 50, density = 150} )
+    
 
     local function addWall(coordinateX, coordinateY) --adding a function to make adding a wall easier
         Walls = display.newImageRect( mainGroup,"Walls.png", 72, 72)
@@ -989,8 +994,23 @@ local en = 0
 
           Runtime:removeEventListener("mouse", proteinProjectile)
       end
+    elseif(event.target.type=="player" and event.other.type=="ShittyNutrients2") then
+      display.remove(event.other)
+      event.other= nil
+      Heart1.isVisible = false
+      emptyHeart3.isVisible = true
+      emptyHeart3.x = 100
+      emptyHeart3.y = 1045
+      reee = reee +1
+      local gameOver = display.newImageRect(mainGroup,"GameOver.png", 1920, 1080)
+      gameOver.x = 1920/2
+      gameOver.y = 1080/2
+      enemy.isVisible = false
+      player.isVisible = false
+      Lord.isVisible = false
 
-  elseif(event.target.type=="player" and event.other.type=="door") then
+
+    elseif(event.target.type=="player" and event.other.type=="door") then
     enemy.isVisible = false
     display.remove(Walls1)
     display.remove(Walls2)
@@ -1019,12 +1039,110 @@ local en = 0
     display.remove(Door)
     enemy.isVisible = false
     transition.to(player, {x=1920/2,y=950, time = 1})
+    Lord.isVisible = true
+    Lord.type = "Lord"
+    Lord.x = 1920/2
+    Lord.y = 144
+    local HeartL1 = display.newImageRect(mainGroup,"Heart.png",72,72)
+    HeartL1.x = 110
+    HeartL1.y = 36
+    HeartL1.isVisible = true
+    local HeartL2 = display.newImageRect(mainGroup,"Heart.png",72,72)
+    HeartL2.x = 182
+    HeartL2.y = 36
+    HeartL2.isVisible = true
+    local HeartL3 = display.newImageRect(mainGroup,"Heart.png",72,72)
+    HeartL3.x = 182+72
+    HeartL3.y = 36
+    HeartL3.isVisible = true
+    local HeartL4 = display.newImageRect(mainGroup,"Heart.png",72,72)
+    HeartL4.x = 182+144
+    HeartL4.y = 36
+    HeartL4.isVisible = true
+    local HeartL5 = display.newImageRect(mainGroup,"Heart.png",72,72)
+    HeartL5.x = 182+144 +72
+    HeartL5.y = 36
+    HeartL5.isVisible = true
+    local HeartL6 = display.newImageRect(mainGroup,"Heart.png",72,72)
+    HeartL6.x = 182+144 +144
+    HeartL6.y = 36
+    HeartL6.isVisible = true
+    local HeartL7 = display.newImageRect(mainGroup,"Heart.png",72,72)
+    HeartL7.x = 182+144 +216
+    HeartL7.y = 36
+    HeartL7.isVisible = true
+    local HeartL8 = display.newImageRect(mainGroup,"Heart.png",72,72)
+    HeartL8.x = 182+144 +216 +72
+    HeartL8.y = 36
+    HeartL8.isVisible = true
+    function LordAttack(event)
+      if Lord.isVisible == true then
+        local ShittyNutrients2 = display.newImageRect(mainGroup,"protein.png", 80, 80)
+        local Math3
+        ShittyNutrients2.isVisible = true
+        ShittyNutrients2.isBullet = true
+        ShittyNutrients2.type = "ShittyNutrients2"
+        ShittyNutrients2.x = Lord.x
+        ShittyNutrients2.y = Lord.y
+        physics.addBody(ShittyNutrients2, "dynamic", {filter=blueCollision})
+        ShittyNutrients2.isSensor = true
+        ShittyNutrients2.isFixedRotation = false
+        Math3 = math.sqrt(math.pow((player.x - Lord.x),2) + math.pow((player.y - Lord.y),2 ))
+        local EX3 = scaleUpPoint(Lord.x, player.x, 1.01, 1)
+        local EY3 = scaleUpPoint(Lord.y, player.y, 1.01, 1)
+        transition.to(ShittyNutrients2, {x=EX3,y=EY3,time=Math3/0.002})
+      end
+    end
 
 
 
-
+      function LordGetHit (self, event)
+        local enemyHit = audio.loadSound("oof.mp3")
+        if Lord.isVisible ==true then
+          local oof = audio.play(enemyHit)
+        if(event.target.type=="Lord" and event.other.type=="protein") then
+          if event.phase == "began" then
+            if ouch == 0 then
+              local oof = audio.play(enemyHit)
+              ouch = 1
+              HeartL8.isVisible = false
+            elseif ouch == 1 then
+              local oof = audio.play(enemyHit)
+              ouch = 2
+              HeartL7.isVisible = false
+            elseif ouch == 2 then
+              ouch = 3
+              HeartL6.isVisible = false
+            elseif ouch == 3 then
+              ouch = 4
+              HeartL5.isVisible = false
+            elseif ouch == 4 then
+              ouch = 5
+              HeartL4.isVisible = false
+            elseif ouch == 5 then
+              ouch = 6
+              HeartL3.isVisible = false
+            elseif ouch == 6 then
+              ouch = 7
+              HeartL2.isVisible = false
+            elseif ouch == 7 then
+              ouch = 8
+              HeartL1.isVisible = false
+            elseif ouch == 8 then
+              ouch = 9
+              HeartL8.isVisible = false
+            end
+          end
+          end
+        end
+      end
+      timer.performWithDelay( 750, LordAttack, -1)
+      Lord.collision = LordGetHit
+      Lord:addEventListener("collision")
+    end
   end
-end
+
+
 
   enemy.collision = onLocalCollision
   enemy:addEventListener( "collision" ) --Checks if enemy has been hit by anything.
