@@ -8,6 +8,7 @@ local mainGroup = display.newGroup()         --Heroes, mobs etc. assets
 
 -- Sounds & Music --
 local backgroundMusic = audio.loadStream("28_爱给网_aigei_com .mp3") --loads music in small chunks to save memory
+local bossMusic = audio.loadStream("lordmusic.mp3")
 local backgroundMusicChannel = audio.play(backgroundMusic, {channel = 1, loops = -1, fadein = 5000,}) --infinite loops, 5sec fade in
 local bgVolume = 0.15--.15
 audio.setMaxVolume(bgVolume, {channel=1}) --sets max volume to bgVolume
@@ -68,6 +69,7 @@ local onMouseHover = function(event) -- Continue lights up when hovered over
     end
 end
 continueButton:addEventListener( "mouseHover", onMouseHover ) -- points to the function above --]]
+--commented out continue as no time to implement saves
 
 -- NEW GAME BUTTON --
 local newButton = display.newImageRect( uiGroup, "newbutton.png", 658, 180 ) -- declaring new game button
@@ -171,7 +173,7 @@ local function menuClicked() --When menu is clicked
     soundOnBox:addEventListener("tap", muteBgmButton)
     soundOffBox:addEventListener("tap", muteBgmButton)
 ----------------------------------------------------------------------------------------
-  --[[  local widget = require("widget")
+  --[[  local widget = require("widget") --dont know how to make widget refer to bgm variable
 
     -- Create the widget
     local slider = widget.newSlider(
@@ -541,15 +543,6 @@ physics.addBody( Walls24, "static", {bounce = 0.0, friction = 50, density = 150}
 Walls24.type = "wall"
 
   -- UI --               -- Health Bar , Armor, Mana , Items
---[[  local function addHeart(X, Y) --adding a function to make adding a wall easier
-    local fullHeart = display.newImageRect(mainGroup,"Heart.png",72,72, X, Y)
-    fullHeart.x = X
-    fullHeart.y = Y
-  end
-  local playerLives = 3
-  addHeart(100,1045)
-  addHeart(150,1045)
-  addHeart(200,1045)]]
   local Heart1 = display.newImageRect(mainGroup,"Heart.png",72,72)
   Heart1.x = 110
   Heart1.y = 1045
@@ -608,7 +601,6 @@ end
         transition.to(ShittyNutrients, {x=EX,y=EY,time=Math2/0.002})
       end
     end
-    --timer.performWithDelay( 1000, EnemyAttack, -1)
 
 --If the player gets too close the enemy will fire projectiles at them.
 --The close the player is to an enemy the higher the rate of fire.
@@ -652,53 +644,6 @@ end
         Right = false
       end
     end
-  --  timer.performWithDelay( 1000, randomMovementEnemy, -1)
-
-  --[[  local en = 0
-    enemy = ghostRun
-    enemy.x = 500
-    enemy.y = 500
-    enemy:play()
-    physics.addBody( enemy, "dynamic",{density =0, bounce =1})
-    enemy.type = "enemy"
-    enemy.isFixedRotation=true
-    player.isBullet = false
-    enemy:setLinearVelocity(0,0)
-    function EnemyAttack(event)
-      if enemy.isVisible == true then
-        local ShittyNutrients = display.newImageRect(mainGroup,"Protein.png", 40, 40)
-        local Math2
-        ShittyNutrients.isVisible = true
-        ShittyNutrients.isBullet = true
-        ShittyNutrients.type = "ShittyNutrients"
-        ShittyNutrients.x = enemy.x
-        ShittyNutrients.y = enemy.y
-        physics.addBody(ShittyNutrients, "dynamic", {filter=blueCollision})
-        ShittyNutrients.isSensor = true
-        ShittyNutrients.isFixedRotation = false
-        Math1 = math.sqrt(math.pow((player.x - enemy.x),2) + math.pow((player.y - enemy.y),2 ))
-          local EX = scaleUpPoint(enemy.x, player.x, 1.01, 1)
-          local EY = scaleUpPoint(enemy.y, player.y, 1.01, 1)
-          transition.to(ShittyNutrients, {x=EX,y=EY,time=Math1/0.002})
-        end
-      end
-      local Right = true
-      local  randomMovementEnemy = function() --endless loop for generating random number for enemy to change movements
-        local minus1 =1
-        local minus2 =1
-        if math.random() > 0.5 then minus1 = -1 end
-        if math.random() > 0.5 then minus2 = -1 end
-        local Ex = ((math.random() *200) +50) *minus1
-        local Ey = ((math.random() *200) +50) *minus2
-        enemy:setLinearVelocity(Ex,Ey)
-        if (enemy.x < player.x) and (Right == false) then
-            enemy:scale(-1,1)
-            Right = true
-          elseif (enemy.x > player.x) and (Right == true) then
-            enemy:scale(-1,1)
-            Right = false
-          end
-        end]]
 
     timer.performWithDelay( 1000, randomMovementEnemy, -1)
     timer.performWithDelay( 1000, EnemyAttack, -1)
@@ -835,14 +780,9 @@ end
       transition.to(Protein, {x=eX,y=eY,time=Math1/0.01})
 
       timer.performWithDelay(1000, shootyshooty)
-    --if (event.isPrimaryButtonUp)then
-      --click1 = 1
-    --end
+    end
   end
-end
 
-    --enemy.preCollision = EnemyDetectRange
-    --enemy:addEventListener("preCollision")
     Runtime:addEventListener("key", onKeyEvent)
     Runtime:addEventListener("mouse", proteinProjectile)
     timer.performWithDelay( 1000, randomMovementEnemy, -1)
@@ -874,43 +814,7 @@ end
         end
       end
     end
-      --[[else
-        if  (event.target.type == "wall" and event.other.type == "protein") then
-          if event.phase =="began" then
-            display.remove(event.other)
-            event.other= nil
-          end
-        end
-      end]]
 
-
-
-  --  Walls.collision = wallCollision
-    --Walls:addEventListener("collision")
-    --[[Walls1:addEventListener("collision", wallCollision2)
-      Walls2:addEventListener("collision", wallCollision2)
-        Walls3:addEventListener("collision", wallCollision2)
-          Walls4:addEventListener("collision", wallCollision2)
-            Walls5:addEventListener("collision", wallCollision2)
-              Walls6:addEventListener("collision", wallCollision2)
-                Walls7:addEventListener("collision", wallCollision2)
-                  Walls8:addEventListener("collision", wallCollision2)
-                    Walls9:addEventListener("collision", wallCollision2)
-                      Walls10:addEventListener("collision", wallCollision2)
-                        Walls11:addEventListener("collision", wallCollision2)
-                          Walls12:addEventListener("collision", wallCollision2)
-                            Walls13:addEventListener("collision", wallCollision2)
-                              Walls14:addEventListener("collision", wallCollision2)
-                                Walls15:addEventListener("collision", wallCollision2)
-                                  Walls16:addEventListener("collision", wallCollision2)
-                                    Walls17:addEventListener("collision", wallCollision2)
-                                      Walls18:addEventListener("collision", wallCollision2)
-                                        Walls19:addEventListener("collision", wallCollision2)
-                                          Walls20:addEventListener("collision", wallCollision2)
-                                            Walls21:addEventListener("collision", wallCollision2)
-                                              Walls22:addEventListener("collision", wallCollision2)
-                                                Walls23:addEventListener("collision", wallCollision2)
-                                                  Walls24:addEventListener("collision", wallCollision2)]]
     Walls1:addEventListener("collision", wallCollision)
       Walls2:addEventListener("collision", wallCollision)
         Walls3:addEventListener("collision", wallCollision)
@@ -974,10 +878,6 @@ local en = 0
         end
       end
 
-    --[[if(event.target.type == "wall" and event.other.type == "protein") then
-      display.remove (event.other)
-      event.other = nil
-    end]]
     elseif(event.target.type=="player" and event.other.type=="ShittyNutrients") then --who coded this abomination? -Jakub
       if event.phase == "began" then
         local oof = audio.play(enemyHit)
@@ -991,9 +891,24 @@ local en = 0
           local gameOver = display.newImageRect(mainGroup,"GameOver.png", 1920, 1080)
           gameOver.x = 1920/2
           gameOver.y = 1080/2
+          local exitButtonFinish = display.newImageRect( "exitbutton.png", 75, 77 ) -- declaring exit button
+              exitButtonFinish.x = 1920 - 75
+              exitButtonFinish.y = 73
+
+          local onMouseHoverBackFinish = function(event) --Back button gets bigger when hovered over
+              if event.phase == "began" then
+                     exitButtonFinish:scale(1.1,1.1)
+              elseif event.phase == "ended" then
+                     exitButtonFinish:scale(0.90909,0.90909)
+              end
+          end
+          exitButtonFinish:addEventListener( "mouseHover", onMouseHoverBackFinish ) --points to the function above
+            local function exitButton_tap2() -- close the application
+                native.requestExit()
+            end
+          exitButtonFinish:addEventListener( "tap", exitButton_tap2 ) -- when exit tapped close the application
           enemy.isVisible = false
           player.isVisible = false
-
           Runtime:removeEventListener("mouse", proteinProjectile)
       end
     elseif(event.target.type=="player" and event.other.type=="ShittyNutrients2") then
@@ -1007,6 +922,22 @@ local en = 0
       local gameOver = display.newImageRect(mainGroup,"GameOver.png", 1920, 1080)
       gameOver.x = 1920/2
       gameOver.y = 1080/2
+      local exitButtonFinish = display.newImageRect( "exitbutton.png", 75, 77 ) -- declaring exit button
+          exitButtonFinish.x = 1920 - 75
+          exitButtonFinish.y = 73
+
+      local onMouseHoverBackFinish = function(event) --Back button gets bigger when hovered over
+          if event.phase == "began" then
+                 exitButtonFinish:scale(1.1,1.1)
+          elseif event.phase == "ended" then
+                 exitButtonFinish:scale(0.90909,0.90909)
+          end
+      end
+      exitButtonFinish:addEventListener( "mouseHover", onMouseHoverBackFinish ) --points to the function above
+        local function exitButton_tap2() -- close the application
+            native.requestExit()
+        end
+      exitButtonFinish:addEventListener( "tap", exitButton_tap2 ) -- when exit tapped close the application
       enemy.isVisible = false
       player.isVisible = false
       Lord.isVisible = false
@@ -1042,6 +973,8 @@ local en = 0
     enemy.isVisible = false
     transition.to(player, {x=1920/2,y=950, time = 1})
     Lord.isVisible = true
+    audio.stop( backgroundMusicChannel )
+    backgroundMusicChannel = audio.play(bossMusic, {channel = 1, loops = -1, fadein = 5000,})
     Lord.type = "Lord"
     transition.to(Lord,{x= 1920/2,time = .5})
     local HeartL1 = display.newImageRect(mainGroup,"Heart.png",72,72)
@@ -1126,15 +1059,31 @@ local en = 0
               HeartL2.isVisible = false
             elseif ouch == 7 then
               local win = display.newImageRect(mainGroup,"Win.png", 1920, 1080)
+              Runtime:removeEventListener("mouse", proteinProjectile)
+              local exitButtonFinish = display.newImageRect( "exitbutton.png", 75, 77 ) -- declaring exit button
+                  exitButtonFinish.x = 1920 - 75
+                  exitButtonFinish.y = 73
+
+              local onMouseHoverBackFinish = function(event) --Back button gets bigger when hovered over
+                  if event.phase == "began" then
+                         exitButtonFinish:scale(1.1,1.1)
+                  elseif event.phase == "ended" then
+                         exitButtonFinish:scale(0.90909,0.90909)
+                  end
+              end
+              exitButtonFinish:addEventListener( "mouseHover", onMouseHoverBackFinish ) --points to the function above
+                local function exitButton_tap2() -- close the application
+                    native.requestExit()
+                end
+              exitButtonFinish:addEventListener( "tap", exitButton_tap2 ) -- when exit tapped close the application
               win.x = 1920/2
               win.y = 1080/2
               enemy.isVisible = false
               player.isVisible = false
               Lord.isVisible = false
 
-
+              end
             end
-          end
           end
         end
       end
@@ -1151,9 +1100,6 @@ local en = 0
 
   player.collision = onLocalCollision
   player:addEventListener("collision")
-
-  --Walls.collision = wallCollision
-  --Walls:addEventListener("collision")
 
 end --end for mageIconClicked
 mageIcon:addEventListener( "tap", mageIconClicked )
