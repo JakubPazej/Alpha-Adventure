@@ -343,7 +343,7 @@ local ghostRun = display.newSprite(mainGroup, ghostSheet, sequences_runningGhost
 
     -- PLAYER PHYSICS --
     local player = minotaurRun -- (72x72)pixels per box to have 400 positions on the map. 20per row.
-    player.x = 1000
+    player.x = 190
     player.y = 180
     physics.addBody( player, "dynamic",{density =5000})
     player.isFixedRotation=true
@@ -365,9 +365,11 @@ local ghostRun = display.newSprite(mainGroup, ghostSheet, sequences_runningGhost
     physics.addBody( Door, "static", {bounce = 0.0, friction = 50, density = 150} )
     Door.type = "door"
     local Lord = display.newImageRect(mainGroup,"lord.png", 288, 288)
+    Lord.x = 2200
+    Lord.y = 144
     Lord.isVisible = false
-    physics.addBody( Door, "static", {bounce = 0.0, friction = 50, density = 150} )
-    
+    physics.addBody( Lord, "static", {bounce = 0.0, friction = 50, density = 150} )
+
 
     local function addWall(coordinateX, coordinateY) --adding a function to make adding a wall easier
         Walls = display.newImageRect( mainGroup,"Walls.png", 72, 72)
@@ -1041,8 +1043,7 @@ local en = 0
     transition.to(player, {x=1920/2,y=950, time = 1})
     Lord.isVisible = true
     Lord.type = "Lord"
-    Lord.x = 1920/2
-    Lord.y = 144
+    transition.to(Lord,{x= 1920/2,time = .5})
     local HeartL1 = display.newImageRect(mainGroup,"Heart.png",72,72)
     HeartL1.x = 110
     HeartL1.y = 36
@@ -1099,15 +1100,13 @@ local en = 0
       function LordGetHit (self, event)
         local enemyHit = audio.loadSound("oof.mp3")
         if Lord.isVisible ==true then
-          local oof = audio.play(enemyHit)
         if(event.target.type=="Lord" and event.other.type=="protein") then
           if event.phase == "began" then
+            local oof = audio.play(enemyHit)
             if ouch == 0 then
-              local oof = audio.play(enemyHit)
               ouch = 1
               HeartL8.isVisible = false
             elseif ouch == 1 then
-              local oof = audio.play(enemyHit)
               ouch = 2
               HeartL7.isVisible = false
             elseif ouch == 2 then
@@ -1126,11 +1125,14 @@ local en = 0
               ouch = 7
               HeartL2.isVisible = false
             elseif ouch == 7 then
-              ouch = 8
-              HeartL1.isVisible = false
-            elseif ouch == 8 then
-              ouch = 9
-              HeartL8.isVisible = false
+              local win = display.newImageRect(mainGroup,"Win.png", 1920, 1080)
+              win.x = 1920/2
+              win.y = 1080/2
+              enemy.isVisible = false
+              player.isVisible = false
+              Lord.isVisible = false
+
+
             end
           end
           end
