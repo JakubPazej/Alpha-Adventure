@@ -342,7 +342,7 @@ local ghostRun = display.newSprite(mainGroup, ghostSheet, sequences_runningGhost
 
     -- PLAYER PHYSICS --
     local player = minotaurRun -- (72x72)pixels per box to have 400 positions on the map. 20per row.
-    player.x = 190
+    player.x = 1000--190
     player.y = 180
     physics.addBody( player, "dynamic",{density =5000})
     player.isFixedRotation=true
@@ -404,6 +404,7 @@ local breakableWall = display.newImageRect( mainGroup,"breakableWall.png", 144+7
 breakableWall.x = 576+144+72
 breakableWall.y = 144+36
 physics.addBody( breakableWall, "static", {bounce = 0.0, friction = 50, density = 150, filter = blueCollision} )
+breakableWall.type ="tnt"
 addWallsLine( 36, 36, 40, 976) --left down
 addWallsLine( 1920-36, 1920-36, 36+72, 1872 + 36 -72 ) --right
 Walls.type = "wall"
@@ -792,17 +793,27 @@ end
     timer.performWithDelay( 1000, randomMovementEnemy, -1)
 
  --Breakable wall break --
-  local function wallBreak()
-    breakableWall:removeSelf()
+  local function wallBreak(event)
+      breakableWall:removeSelf()
   end
   breakableWall.collision = wallBreak
   breakableWall:addEventListener("collision")
 
 
     function wallCollision( event )
+      local owo = 0
       if event.phase =="began" then
-      if  (event.target.type == "wall" and (event.other.type == "ShittyNutrients" or "protein")) then
-
+        if (event.other.type == "ShittyNutrients") then
+          owo = 1
+        end
+        if (event.other.type =="protein") then
+        owo = 2
+      end
+        if owo ==1 then
+          display.remove(event.other)
+          event.other= nil
+        end
+        if owo ==2 then
           display.remove(event.other)
           event.other= nil
         end
